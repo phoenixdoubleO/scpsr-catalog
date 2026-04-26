@@ -18,19 +18,14 @@
     --accent: #c8a84b;
     --safe: #4a9e6b;
     --safe-bg: #0d1f15;
-    --safe-border: #1e4830;
     --euclid: #c8a84b;
     --euclid-bg: #1e1800;
-    --euclid-border: #3d3210;
     --keter: #c84b4b;
     --keter-bg: #1f0d0d;
-    --keter-border: #481818;
     --thaumiel: #7b6fc8;
     --thaumiel-bg: #100f1f;
-    --thaumiel-border: #282060;
     --pending: #5a6070;
     --pending-bg: #111318;
-    --pending-border: #2a2e3a;
   }
 
   * { box-sizing: border-box; margin: 0; padding: 0; }
@@ -44,7 +39,6 @@
     overflow-x: hidden;
   }
 
-  /* scanline overlay */
   body::before {
     content: '';
     position: fixed;
@@ -63,166 +57,89 @@
   header::after {
     content: '';
     position: absolute;
-    bottom: -2px;
-    left: 0;
-    width: 100%;
-    height: 1px;
+    bottom: -2px; left: 0;
+    width: 100%; height: 1px;
     background: linear-gradient(90deg, transparent, var(--accent), transparent);
     opacity: 0.4;
   }
 
-  .header-top {
-    display: flex;
-    align-items: flex-start;
-    gap: 1.5rem;
-    margin-bottom: 1.25rem;
-  }
+  .header-top { display: flex; align-items: flex-start; gap: 1.5rem; margin-bottom: 1.25rem; }
 
-  .logo {
-    width: 56px;
-    height: 56px;
-    flex-shrink: 0;
-    opacity: 0.85;
-  }
+  .logo { width: 56px; height: 56px; flex-shrink: 0; opacity: 0.85; }
 
   .header-text h1 {
     font-family: 'Barlow Condensed', sans-serif;
-    font-size: 2rem;
-    font-weight: 700;
+    font-size: 2rem; font-weight: 700;
     color: var(--text-bright);
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    line-height: 1;
+    letter-spacing: 0.08em; text-transform: uppercase; line-height: 1;
   }
 
   .header-text .subtitle {
     font-family: 'Share Tech Mono', monospace;
-    font-size: 0.72rem;
-    color: var(--text-dim);
-    letter-spacing: 0.15em;
-    margin-top: 4px;
-    text-transform: uppercase;
+    font-size: 0.72rem; color: var(--text-dim);
+    letter-spacing: 0.15em; margin-top: 4px; text-transform: uppercase;
   }
 
-  .controls {
-    display: flex;
-    gap: 10px;
-    flex-wrap: wrap;
-    align-items: center;
-  }
+  .controls { display: flex; gap: 10px; flex-wrap: wrap; align-items: center; }
 
-  .search-wrap {
-    flex: 1;
-    min-width: 220px;
-    position: relative;
-  }
-
-  .search-wrap svg {
-    position: absolute;
-    left: 12px;
-    top: 50%;
-    transform: translateY(-50%);
-    opacity: 0.35;
-    pointer-events: none;
-  }
+  .search-wrap { flex: 1; min-width: 220px; position: relative; }
+  .search-wrap svg { position: absolute; left: 12px; top: 50%; transform: translateY(-50%); opacity: 0.35; pointer-events: none; }
 
   #search {
-    width: 100%;
-    padding: 10px 12px 10px 38px;
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    color: var(--text-bright);
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 0.82rem;
-    letter-spacing: 0.05em;
-    outline: none;
-    transition: border-color 0.2s;
+    width: 100%; padding: 10px 12px 10px 38px;
+    background: var(--surface); border: 1px solid var(--border); border-radius: 4px;
+    color: var(--text-bright); font-family: 'Share Tech Mono', monospace;
+    font-size: 0.82rem; letter-spacing: 0.05em; outline: none; transition: border-color 0.2s;
   }
-
   #search::placeholder { color: var(--text-dim); }
   #search:focus { border-color: var(--border-bright); }
 
   .add-btn {
-    padding: 10px 20px;
-    background: transparent;
-    border: 1px solid var(--accent);
-    border-radius: 4px;
-    color: var(--accent);
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 0.9rem;
-    font-weight: 600;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    cursor: pointer;
-    transition: background 0.2s, color 0.2s;
-    white-space: nowrap;
+    padding: 10px 20px; background: transparent;
+    border: 1px solid var(--accent); border-radius: 4px;
+    color: var(--accent); font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.9rem; font-weight: 600; letter-spacing: 0.1em;
+    text-transform: uppercase; cursor: pointer;
+    transition: background 0.2s, color 0.2s; white-space: nowrap;
   }
   .add-btn:hover { background: var(--accent); color: #000; }
 
-  main {
-    padding: 2rem 2.5rem;
-    max-width: 960px;
+  .admin-btn {
+    padding: 10px 16px; background: transparent;
+    border: 1px solid var(--border); border-radius: 4px;
+    color: var(--text-dim); font-family: 'Share Tech Mono', monospace;
+    font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase;
+    cursor: pointer; transition: border-color 0.2s, color 0.2s; white-space: nowrap;
   }
+  .admin-btn:hover { border-color: var(--border-bright); color: var(--text); }
 
-  .class-section {
-    margin-bottom: 2.5rem;
-    animation: fadeIn 0.3s ease;
-  }
+  main { padding: 2rem 2.5rem; max-width: 960px; }
 
+  .class-section { margin-bottom: 2.5rem; animation: fadeIn 0.3s ease; }
   @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
 
-  .section-label {
-    display: flex;
-    align-items: center;
-    gap: 12px;
-    margin-bottom: 12px;
-  }
+  .section-label { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
 
   .class-tag {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 0.75rem;
-    font-weight: 700;
-    letter-spacing: 0.18em;
-    text-transform: uppercase;
-    padding: 4px 12px;
-    border-radius: 2px;
-    border-left: 3px solid;
+    font-family: 'Barlow Condensed', sans-serif; font-size: 0.75rem; font-weight: 700;
+    letter-spacing: 0.18em; text-transform: uppercase; padding: 4px 12px;
+    border-radius: 2px; border-left: 3px solid;
   }
-
   .class-tag.safe     { color: var(--safe);     background: var(--safe-bg);     border-color: var(--safe); }
   .class-tag.euclid   { color: var(--euclid);   background: var(--euclid-bg);   border-color: var(--euclid); }
   .class-tag.keter    { color: var(--keter);     background: var(--keter-bg);    border-color: var(--keter); }
   .class-tag.thaumiel { color: var(--thaumiel); background: var(--thaumiel-bg); border-color: var(--thaumiel); }
   .class-tag.pending  { color: var(--pending);   background: var(--pending-bg);  border-color: var(--pending); }
 
-  .entry-count {
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 0.72rem;
-    color: var(--text-dim);
-    letter-spacing: 0.1em;
-  }
-
-  .divider {
-    flex: 1;
-    height: 1px;
-    background: var(--border);
-  }
-
+  .entry-count { font-family: 'Share Tech Mono', monospace; font-size: 0.72rem; color: var(--text-dim); letter-spacing: 0.1em; }
+  .divider { flex: 1; height: 1px; background: var(--border); }
   .entries { display: flex; flex-direction: column; gap: 6px; }
 
   .scp-card {
-    background: var(--surface);
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    padding: 12px 16px;
-    display: grid;
-    grid-template-columns: 110px 1fr;
-    gap: 0 16px;
-    align-items: start;
-    transition: border-color 0.15s;
+    background: var(--surface); border: 1px solid var(--border); border-radius: 4px;
+    padding: 12px 16px; display: grid; grid-template-columns: 120px 1fr;
+    gap: 0 16px; align-items: start; transition: border-color 0.15s;
   }
-
   .scp-card:hover { border-color: var(--border-bright); }
   .scp-card.safe     { border-left: 2px solid var(--safe); }
   .scp-card.euclid   { border-left: 2px solid var(--euclid); }
@@ -230,161 +147,170 @@
   .scp-card.thaumiel { border-left: 2px solid var(--thaumiel); }
   .scp-card.pending  { border-left: 2px solid var(--pending); }
 
-  .scp-number {
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 0.88rem;
-    color: var(--text-dim);
-    padding-top: 2px;
-    letter-spacing: 0.05em;
-  }
+  .scp-number { font-family: 'Share Tech Mono', monospace; font-size: 0.88rem; color: var(--text-dim); padding-top: 2px; letter-spacing: 0.05em; }
+  .scp-name { font-size: 0.95rem; font-weight: 500; color: var(--text-bright); line-height: 1.3; }
+  .scp-desc { font-size: 0.82rem; color: var(--text-dim); margin-top: 3px; line-height: 1.5; }
+  .empty-note { font-family: 'Share Tech Mono', monospace; font-size: 0.75rem; color: var(--text-dim); padding: 10px 0 4px; letter-spacing: 0.05em; }
 
-  .scp-name {
-    font-size: 0.95rem;
-    font-weight: 500;
-    color: var(--text-bright);
-    line-height: 1.3;
-  }
-
-  .scp-desc {
-    font-size: 0.82rem;
-    color: var(--text-dim);
-    margin-top: 3px;
-    line-height: 1.5;
-    font-weight: 300;
-  }
-
-  .empty-note {
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 0.75rem;
-    color: var(--text-dim);
-    padding: 10px 0 4px;
-    letter-spacing: 0.05em;
-  }
-
-  /* Modal */
+  /* ── Modals ── */
   .modal-overlay {
-    display: none;
-    position: fixed;
-    inset: 0;
-    background: rgba(0,0,0,0.7);
-    z-index: 500;
-    align-items: center;
-    justify-content: center;
-    backdrop-filter: blur(2px);
+    display: none; position: fixed; inset: 0;
+    background: rgba(0,0,0,0.75); z-index: 500;
+    align-items: center; justify-content: center; backdrop-filter: blur(2px);
   }
   .modal-overlay.open { display: flex; }
 
   .modal {
-    background: var(--surface2);
-    border: 1px solid var(--border-bright);
-    border-radius: 6px;
-    padding: 2rem;
-    width: 400px;
-    max-width: 95vw;
-    position: relative;
+    background: var(--surface2); border: 1px solid var(--border-bright);
+    border-radius: 6px; padding: 2rem; width: 420px; max-width: 95vw;
+    position: relative; max-height: 90vh; overflow-y: auto;
   }
-
   .modal::before {
-    content: '';
-    position: absolute;
-    top: -1px; left: 10%; right: 10%;
-    height: 1px;
-    background: linear-gradient(90deg, transparent, var(--accent), transparent);
-    opacity: 0.6;
+    content: ''; position: absolute; top: -1px; left: 10%; right: 10%;
+    height: 1px; background: linear-gradient(90deg, transparent, var(--accent), transparent); opacity: 0.6;
   }
 
   .modal-title {
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 1.1rem;
-    font-weight: 700;
-    letter-spacing: 0.1em;
-    text-transform: uppercase;
-    color: var(--text-bright);
-    margin-bottom: 1.5rem;
+    font-family: 'Barlow Condensed', sans-serif; font-size: 1.1rem; font-weight: 700;
+    letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-bright); margin-bottom: 1.5rem;
   }
 
   .field { margin-bottom: 14px; }
-
   .field label {
-    display: block;
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 0.7rem;
-    letter-spacing: 0.12em;
-    color: var(--text-dim);
-    text-transform: uppercase;
-    margin-bottom: 5px;
+    display: block; font-family: 'Share Tech Mono', monospace; font-size: 0.7rem;
+    letter-spacing: 0.12em; color: var(--text-dim); text-transform: uppercase; margin-bottom: 5px;
   }
-
-  .field input,
-  .field select,
-  .field textarea {
-    width: 100%;
-    padding: 9px 12px;
-    background: var(--bg);
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    color: var(--text-bright);
-    font-family: 'Barlow', sans-serif;
-    font-size: 0.9rem;
-    outline: none;
-    transition: border-color 0.2s;
+  .field input, .field select, .field textarea {
+    width: 100%; padding: 9px 12px; background: var(--bg);
+    border: 1px solid var(--border); border-radius: 4px;
+    color: var(--text-bright); font-family: 'Barlow', sans-serif;
+    font-size: 0.9rem; outline: none; transition: border-color 0.2s;
   }
-
-  .field input:focus,
-  .field select:focus,
-  .field textarea:focus { border-color: var(--accent); }
-
+  .field input:focus, .field select:focus, .field textarea:focus { border-color: var(--accent); }
   .field textarea { resize: vertical; min-height: 80px; font-weight: 300; }
-
   .field select option { background: var(--surface2); }
 
-  .modal-actions {
-    display: flex;
-    gap: 10px;
-    justify-content: flex-end;
-    margin-top: 1.5rem;
-  }
+  .modal-actions { display: flex; gap: 10px; justify-content: flex-end; margin-top: 1.5rem; }
 
   .btn-cancel {
-    padding: 9px 18px;
-    background: transparent;
-    border: 1px solid var(--border);
-    border-radius: 4px;
-    color: var(--text-dim);
-    font-family: 'Barlow', sans-serif;
-    font-size: 0.9rem;
-    cursor: pointer;
-    transition: border-color 0.2s, color 0.2s;
+    padding: 9px 18px; background: transparent; border: 1px solid var(--border);
+    border-radius: 4px; color: var(--text-dim); font-family: 'Barlow', sans-serif;
+    font-size: 0.9rem; cursor: pointer; transition: border-color 0.2s, color 0.2s;
   }
   .btn-cancel:hover { border-color: var(--border-bright); color: var(--text); }
 
   .btn-save {
-    padding: 9px 22px;
-    background: var(--accent);
-    border: 1px solid var(--accent);
-    border-radius: 4px;
-    color: #000;
-    font-family: 'Barlow Condensed', sans-serif;
-    font-size: 0.95rem;
-    font-weight: 700;
-    letter-spacing: 0.08em;
-    text-transform: uppercase;
-    cursor: pointer;
-    transition: opacity 0.2s;
+    padding: 9px 22px; background: var(--accent); border: 1px solid var(--accent);
+    border-radius: 4px; color: #000; font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.95rem; font-weight: 700; letter-spacing: 0.08em; text-transform: uppercase;
+    cursor: pointer; transition: opacity 0.2s;
   }
   .btn-save:hover { opacity: 0.85; }
+  .btn-save:disabled { opacity: 0.4; cursor: not-allowed; }
 
-  .error-msg {
-    font-family: 'Share Tech Mono', monospace;
-    font-size: 0.72rem;
-    color: var(--keter);
-    margin-top: 1rem;
-    display: none;
+  .error-msg { font-family: 'Share Tech Mono', monospace; font-size: 0.72rem; color: var(--keter); margin-top: 1rem; display: none; }
+
+  /* ── Admin Panel ── */
+  .admin-panel {
+    display: none; position: fixed; inset: 0;
+    background: var(--bg); z-index: 600; overflow-y: auto;
+    padding: 2rem 2.5rem;
   }
+  .admin-panel.open { display: block; }
+
+  .admin-header {
+    display: flex; align-items: center; justify-content: space-between;
+    margin-bottom: 2rem; padding-bottom: 1rem;
+    border-bottom: 1px solid var(--border);
+  }
+
+  .admin-header h2 {
+    font-family: 'Barlow Condensed', sans-serif; font-size: 1.4rem;
+    font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--text-bright);
+  }
+
+  .admin-close {
+    padding: 8px 16px; background: transparent; border: 1px solid var(--border);
+    border-radius: 4px; color: var(--text-dim); font-family: 'Share Tech Mono', monospace;
+    font-size: 0.72rem; letter-spacing: 0.1em; text-transform: uppercase; cursor: pointer;
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .admin-close:hover { border-color: var(--keter); color: var(--keter); }
+
+  .admin-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 2rem; max-width: 1100px; }
+  @media (max-width: 700px) { .admin-grid { grid-template-columns: 1fr; } }
+
+  .admin-card {
+    background: var(--surface); border: 1px solid var(--border);
+    border-radius: 6px; padding: 1.5rem;
+  }
+
+  .admin-card h3 {
+    font-family: 'Barlow Condensed', sans-serif; font-size: 1rem; font-weight: 700;
+    letter-spacing: 0.12em; text-transform: uppercase; color: var(--accent); margin-bottom: 1rem;
+  }
+
+  .admin-entry-list { display: flex; flex-direction: column; gap: 8px; margin-bottom: 1rem; }
+
+  .admin-entry-row {
+    display: flex; align-items: center; gap: 10px;
+    background: var(--surface2); border: 1px solid var(--border);
+    border-radius: 4px; padding: 8px 12px;
+  }
+
+  .admin-entry-num { font-family: 'Share Tech Mono', monospace; font-size: 0.8rem; color: var(--text-dim); min-width: 80px; }
+  .admin-entry-name { font-size: 0.88rem; color: var(--text-bright); flex: 1; }
+  .admin-del {
+    font-family: 'Share Tech Mono', monospace; font-size: 0.7rem; color: var(--keter);
+    background: none; border: 1px solid var(--keter-bg); border-radius: 3px;
+    padding: 3px 8px; cursor: pointer; opacity: 0.7; transition: opacity 0.2s;
+  }
+  .admin-del:hover { opacity: 1; }
+
+  .admin-add-form { border-top: 1px solid var(--border); padding-top: 1rem; margin-top: 0.5rem; }
+  .admin-add-form .field { margin-bottom: 10px; }
+  .admin-add-form .field input,
+  .admin-add-form .field select,
+  .admin-add-form .field textarea { font-size: 0.85rem; padding: 7px 10px; }
+  .admin-add-form .field textarea { min-height: 60px; }
+
+  .btn-add-entry {
+    width: 100%; padding: 9px; background: transparent;
+    border: 1px solid var(--accent); border-radius: 4px;
+    color: var(--accent); font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.9rem; font-weight: 700; letter-spacing: 0.08em;
+    text-transform: uppercase; cursor: pointer; transition: background 0.2s, color 0.2s;
+  }
+  .btn-add-entry:hover { background: var(--accent); color: #000; }
+
+  .save-status {
+    font-family: 'Share Tech Mono', monospace; font-size: 0.72rem;
+    letter-spacing: 0.08em; margin-top: 1rem; padding: 8px 12px;
+    border-radius: 4px; display: none;
+  }
+  .save-status.saving { display: block; color: var(--accent); background: var(--euclid-bg); border: 1px solid var(--euclid-border, #3d3210); }
+  .save-status.success { display: block; color: var(--safe); background: var(--safe-bg); border: 1px solid var(--safe-border, #1e4830); }
+  .save-status.error { display: block; color: var(--keter); background: var(--keter-bg); border: 1px solid #481818; }
+
+  .btn-publish {
+    width: 100%; padding: 12px; background: var(--accent); border: none;
+    border-radius: 4px; color: #000; font-family: 'Barlow Condensed', sans-serif;
+    font-size: 1rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+    cursor: pointer; transition: opacity 0.2s; margin-top: 0.5rem;
+  }
+  .btn-publish:hover { opacity: 0.85; }
+  .btn-publish:disabled { opacity: 0.4; cursor: not-allowed; }
+
+  .instructions {
+    font-family: 'Share Tech Mono', monospace; font-size: 0.72rem;
+    color: var(--text-dim); line-height: 1.8; letter-spacing: 0.04em;
+  }
+  .instructions span { color: var(--accent); }
 
   @media (max-width: 600px) {
     header, main { padding-left: 1.25rem; padding-right: 1.25rem; }
     .scp-card { grid-template-columns: 90px 1fr; }
+    .admin-panel { padding: 1.25rem; }
   }
 </style>
 </head>
@@ -419,6 +345,7 @@
       <input type="text" id="search" placeholder="Search entries..." oninput="render()">
     </div>
     <button class="add-btn" onclick="openModal()">+ Log Entry</button>
+    <button class="admin-btn" onclick="openAdminLogin()">Admin</button>
   </div>
 </header>
 
@@ -426,13 +353,20 @@
   <div id="sections"></div>
 </main>
 
-<!-- Modal -->
+<!-- Submit Modal -->
 <div class="modal-overlay" id="modal" onclick="overlayClick(event)">
   <div class="modal">
     <div class="modal-title">Submit Entry for Review</div>
     <div class="field">
       <label>SCP Number</label>
-      <input type="number" id="inp-num" placeholder="e.g. 173" min="1">
+      <div style="display:flex;gap:8px;align-items:center;">
+        <span style="font-family:'Share Tech Mono',monospace;font-size:0.85rem;color:var(--text-dim);white-space:nowrap;">SCP-</span>
+        <input type="text" inputmode="numeric" id="inp-num" placeholder="e.g. 173" style="flex:1;">
+        <select id="inp-suffix" style="width:110px;">
+          <option value="">&#8212; none &#8212;</option>
+          <option value="-N">-N (Pending)</option>
+        </select>
+      </div>
     </div>
     <div class="field">
       <label>Designation / Name</label>
@@ -449,7 +383,7 @@
       </select>
     </div>
     <div class="field">
-      <label>Brief Description (optional)</label>
+      <label>Brief Description</label>
       <textarea id="inp-desc" placeholder="Short summary of the anomaly..."></textarea>
     </div>
     <div class="field">
@@ -460,8 +394,8 @@
       <label>Document Link (Google Doc, etc.)</label>
       <input type="url" id="inp-doc" placeholder="https://docs.google.com/...">
     </div>
-    <div class="error-msg" id="err">⚠ Please enter a valid number and name.</div>
-    <div class="submit-note" id="submit-note" style="font-family:'Share Tech Mono',monospace;font-size:0.7rem;color:var(--text-dim);margin-top:10px;line-height:1.6;">
+    <div class="error-msg" id="err">&#9888; All fields are required. Please fill everything out.</div>
+    <div style="font-family:'Share Tech Mono',monospace;font-size:0.7rem;color:var(--text-dim);margin-top:10px;line-height:1.6;">
       Your submission will be reviewed before it appears on the catalog.
     </div>
     <div class="modal-actions">
@@ -474,38 +408,153 @@
 <!-- Success Modal -->
 <div class="modal-overlay" id="success-modal" onclick="document.getElementById('success-modal').classList.remove('open')">
   <div class="modal" style="text-align:center;">
-    <div style="font-size:2rem;margin-bottom:1rem;">✓</div>
+    <div style="font-size:2rem;margin-bottom:1rem;">&#10003;</div>
     <div class="modal-title" style="margin-bottom:0.5rem;">Submission Received</div>
     <p style="font-size:0.85rem;color:var(--text-dim);line-height:1.6;margin-bottom:1.5rem;">Your entry has been sent for review. If approved, it will be added to the catalog.</p>
     <button class="btn-save" onclick="document.getElementById('success-modal').classList.remove('open')" style="width:100%;">Close</button>
   </div>
 </div>
 
+<!-- Admin Login Modal -->
+<div class="modal-overlay" id="admin-login" onclick="adminLoginOverlay(event)">
+  <div class="modal" style="width:340px;">
+    <div class="modal-title">Admin Access</div>
+    <div class="field">
+      <label>Password</label>
+      <input type="password" id="admin-pw" placeholder="Enter password" onkeydown="if(event.key==='Enter')checkAdminPw()">
+    </div>
+    <div class="error-msg" id="admin-err" style="display:none;">&#9888; Incorrect password.</div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="document.getElementById('admin-login').classList.remove('open')">Cancel</button>
+      <button class="btn-save" onclick="checkAdminPw()">Enter</button>
+    </div>
+  </div>
+</div>
+
+<!-- Admin Panel -->
+<div class="admin-panel" id="admin-panel">
+  <div class="admin-header">
+    <h2>&#9881; Admin Panel</h2>
+    <button class="admin-close" onclick="closeAdmin()">&#x2715; Close Panel</button>
+  </div>
+
+  <div class="admin-grid">
+    <!-- Left: Add + Manage entries -->
+    <div>
+      <div class="admin-card" style="margin-bottom:1.5rem;">
+        <h3>Add New Entry</h3>
+        <div class="admin-add-form">
+          <div class="field">
+            <label>SCP Number</label>
+            <div style="display:flex;gap:6px;align-items:center;">
+              <span style="font-family:'Share Tech Mono',monospace;font-size:0.8rem;color:var(--text-dim);white-space:nowrap;">SCP-</span>
+              <input type="text" inputmode="numeric" id="a-num" placeholder="173" style="flex:1;">
+              <select id="a-suffix" style="width:100px;">
+                <option value="">&#8212; none &#8212;</option>
+                <option value="-N">-N (Pending)</option>
+              </select>
+            </div>
+          </div>
+          <div class="field">
+            <label>Name</label>
+            <input type="text" id="a-name" placeholder="The Sculpture">
+          </div>
+          <div class="field">
+            <label>Object Class</label>
+            <select id="a-class">
+              <option value="Safe">Safe</option>
+              <option value="Euclid">Euclid</option>
+              <option value="Keter">Keter</option>
+              <option value="Thaumiel">Thaumiel</option>
+              <option value="Pending">Pending</option>
+            </select>
+          </div>
+          <div class="field">
+            <label>Description</label>
+            <textarea id="a-desc" placeholder="Short summary..."></textarea>
+          </div>
+          <div class="field">
+            <label>Document Link</label>
+            <input type="url" id="a-doc" placeholder="https://docs.google.com/...">
+          </div>
+          <div class="error-msg" id="a-err">&#9888; Number and name are required.</div>
+          <button class="btn-add-entry" onclick="adminAddEntry()">+ Add to Catalog</button>
+        </div>
+      </div>
+
+      <div class="admin-card">
+        <h3>Current Entries (<span id="entry-count">0</span>)</h3>
+        <div class="admin-entry-list" id="admin-entry-list"></div>
+      </div>
+    </div>
+
+    <!-- Right: Publish -->
+    <div>
+      <div class="admin-card" style="margin-bottom:1.5rem;">
+        <h3>Publish to Site</h3>
+        <p class="instructions" style="margin-bottom:1rem;">
+          When you're done making changes, click <span>Publish</span> to save everything to GitHub. The site will update live for everyone within seconds.
+        </p>
+        <button class="btn-publish" id="publish-btn" onclick="publishToGitHub()">&#8593; Publish Changes</button>
+        <div class="save-status" id="save-status"></div>
+      </div>
+
+      <div class="admin-card">
+        <h3>Setup</h3>
+        <p class="instructions">
+          1. Open this file in GitHub<br>
+          2. Find the line: <span>const GITHUB_TOKEN</span><br>
+          3. Replace <span>YOUR_TOKEN_HERE</span> with your personal access token<br>
+          4. Save &amp; commit — publishing will then work automatically.<br><br>
+          Token needs <span>repo</span> scope. Keep it private!
+        </p>
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
-// ─── PASTE YOUR FORMSPREE ENDPOINT BELOW ───────────────────────────────────
-const FORMSPREE_URL = "https://formspree.io/f/mnjlyjqp";
+// ─── CONFIG ────────────────────────────────────────────────────────────────
+const FORMSPREE_URL  = "https://formspree.io/f/mnjlyjqp";
+const GITHUB_TOKEN   = "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";   // paste your ghp_... token here
+const GITHUB_OWNER   = "phoenixdoubleo";
+const GITHUB_REPO    = "scpsr-catalog";
+const GITHUB_FILE    = "index.html";
+const ADMIN_PASSWORD = "MajorRedIsCool";
 // ───────────────────────────────────────────────────────────────────────────
 
-// ─── ADD YOUR APPROVED ENTRIES HERE ────────────────────────────────────────
+// ─── ADD APPROVED ENTRIES HERE ─────────────────────────────────────────────
 const ENTRIES = [
-  // { num: 173, name: "The Sculpture", cls: "Euclid", desc: "Animate concrete statue.", doc: "" },
+  // { num: 173, suffix: "", name: "The Sculpture", cls: "Euclid", desc: "Animate concrete statue.", doc: "https://..." },
 ];
 // ───────────────────────────────────────────────────────────────────────────
 
 const CLASSES = ["Safe","Euclid","Keter","Thaumiel","Pending"];
+let adminEntries = JSON.parse(JSON.stringify(ENTRIES));
+
+// ── Public submit form ──────────────────────────────────────────────────────
+function blockLetters(e) {
+  const allowed = ['Backspace','Delete','ArrowLeft','ArrowRight','Tab','Home','End'];
+  if (allowed.includes(e.key)) return;
+  if (!/^[0-9]$/.test(e.key)) e.preventDefault();
+}
 
 function openModal() {
   document.getElementById('modal').classList.add('open');
   document.getElementById('err').style.display = 'none';
   document.getElementById('submit-btn').disabled = false;
   document.getElementById('submit-btn').textContent = 'Submit';
-  setTimeout(() => document.getElementById('inp-num').focus(), 50);
+  const f = document.getElementById('inp-num');
+  f.addEventListener('keydown', blockLetters);
+  f.addEventListener('input', () => { f.value = f.value.replace(/[^0-9]/g,''); });
+  setTimeout(() => f.focus(), 50);
 }
 
 function closeModal() {
   document.getElementById('modal').classList.remove('open');
   ['inp-num','inp-name','inp-desc','inp-discord','inp-doc'].forEach(id => document.getElementById(id).value = '');
   document.getElementById('inp-class').value = 'Safe';
+  document.getElementById('inp-suffix').value = '';
 }
 
 function overlayClick(e) {
@@ -513,53 +562,50 @@ function overlayClick(e) {
 }
 
 async function saveEntry() {
-  const num = parseInt(document.getElementById('inp-num').value);
-  const name = document.getElementById('inp-name').value.trim();
-  const cls = document.getElementById('inp-class').value;
-  const desc = document.getElementById('inp-desc').value.trim();
+  const numRaw = document.getElementById('inp-num').value.trim();
+  const suffix  = document.getElementById('inp-suffix').value;
+  const name    = document.getElementById('inp-name').value.trim();
+  const cls     = document.getElementById('inp-class').value;
+  const desc    = document.getElementById('inp-desc').value.trim();
   const discord = document.getElementById('inp-discord').value.trim();
-  const doc = document.getElementById('inp-doc').value.trim();
+  const doc     = document.getElementById('inp-doc').value.trim();
+  const num     = parseInt(numRaw);
+  const errEl   = document.getElementById('err');
 
-  if (!num || num < 1 || !name) {
-    document.getElementById('err').style.display = 'block';
-    return;
+  if (!num || num < 1 || !name || !desc || !discord || !doc) {
+    errEl.textContent = '⚠ All fields are required.';
+    errEl.style.display = 'block'; return;
   }
 
   const btn = document.getElementById('submit-btn');
-  btn.disabled = true;
-  btn.textContent = 'Sending...';
+  btn.disabled = true; btn.textContent = 'Sending...';
 
   try {
     const res = await fetch(FORMSPREE_URL, {
       method: 'POST',
       headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
       body: JSON.stringify({
-        scp_number: `SCP-${String(num).padStart(3,'0')}`,
-        name,
-        object_class: cls,
-        description: desc || '(none)',
-        discord_username: discord || '(not provided)',
-        document_link: doc || '(not provided)'
+        scp_number: `SCP-${String(num).padStart(3,'0')}${suffix}`,
+        name, object_class: cls, description: desc,
+        discord_username: discord, document_link: doc
       })
     });
-
     if (res.ok) {
       closeModal();
       document.getElementById('success-modal').classList.add('open');
     } else {
-      btn.disabled = false;
-      btn.textContent = 'Submit';
-      document.getElementById('err').textContent = '⚠ Submission failed. Please try again.';
-      document.getElementById('err').style.display = 'block';
+      btn.disabled = false; btn.textContent = 'Submit';
+      errEl.textContent = '⚠ Submission failed. Please try again.';
+      errEl.style.display = 'block';
     }
   } catch {
-    btn.disabled = false;
-    btn.textContent = 'Submit';
-    document.getElementById('err').textContent = '⚠ Network error. Please try again.';
-    document.getElementById('err').style.display = 'block';
+    btn.disabled = false; btn.textContent = 'Submit';
+    errEl.textContent = '⚠ Network error. Please try again.';
+    errEl.style.display = 'block';
   }
 }
 
+// ── Main catalog render ─────────────────────────────────────────────────────
 function render() {
   const q = document.getElementById('search').value.toLowerCase();
   const filtered = ENTRIES.filter(e =>
@@ -570,27 +616,27 @@ function render() {
   const container = document.getElementById('sections');
   container.innerHTML = '';
   CLASSES.forEach(cls => {
-    const group = filtered.filter(e => e.cls === cls).sort((a, b) => a.num - b.num);
-    const totalInClass = ENTRIES.filter(e => e.cls === cls).length;
+    const group = filtered.filter(e => e.cls === cls).sort((a,b) => a.num - b.num);
+    const total = ENTRIES.filter(e => e.cls === cls).length;
     const sec = document.createElement('div');
     sec.className = 'class-section';
     const clsKey = cls.toLowerCase();
     sec.innerHTML = `
       <div class="section-label">
         <span class="class-tag ${clsKey}">${cls}</span>
-        <span class="entry-count">${totalInClass} ENTR${totalInClass === 1 ? 'Y' : 'IES'}</span>
+        <span class="entry-count">${total} ENTR${total===1?'Y':'IES'}</span>
         <div class="divider"></div>
       </div>
       <div class="entries">
         ${group.length === 0
-          ? `<div class="empty-note">[ NO ${q ? 'MATCHING ' : ''}ENTRIES ]</div>`
+          ? `<div class="empty-note">[ NO ${q?'MATCHING ':''}ENTRIES ]</div>`
           : group.map(e => `
             <div class="scp-card ${clsKey}">
-              <div class="scp-number">SCP-${String(e.num).padStart(3,'0')}</div>
+              <div class="scp-number">SCP-${String(e.num).padStart(3,'0')}${e.suffix||''}</div>
               <div>
                 <div class="scp-name">${e.name}</div>
                 ${e.desc ? `<div class="scp-desc">${e.desc}</div>` : ''}
-                ${e.doc ? `<a href="${e.doc}" target="_blank" style="font-size:0.75rem;color:var(--accent);text-decoration:none;font-family:'Share Tech Mono',monospace;letter-spacing:0.05em;">[ VIEW DOCUMENT ]</a>` : ''}
+                ${e.doc  ? `<a href="${e.doc}" target="_blank" style="font-size:0.75rem;color:var(--accent);text-decoration:none;font-family:'Share Tech Mono',monospace;letter-spacing:0.05em;">[ VIEW DOCUMENT ]</a>` : ''}
               </div>
             </div>`).join('')}
       </div>`;
@@ -598,8 +644,157 @@ function render() {
   });
 }
 
-document.getElementById('inp-num').addEventListener('keydown', e => { if (e.key === 'Enter') saveEntry(); });
-document.getElementById('inp-name').addEventListener('keydown', e => { if (e.key === 'Enter') saveEntry(); });
+// ── Admin login ─────────────────────────────────────────────────────────────
+function openAdminLogin() {
+  document.getElementById('admin-login').classList.add('open');
+  document.getElementById('admin-err').style.display = 'none';
+  document.getElementById('admin-pw').value = '';
+  setTimeout(() => document.getElementById('admin-pw').focus(), 50);
+}
+
+function adminLoginOverlay(e) {
+  if (e.target === document.getElementById('admin-login'))
+    document.getElementById('admin-login').classList.remove('open');
+}
+
+function checkAdminPw() {
+  const pw = document.getElementById('admin-pw').value;
+  if (pw === ADMIN_PASSWORD) {
+    document.getElementById('admin-login').classList.remove('open');
+    openAdmin();
+  } else {
+    document.getElementById('admin-err').style.display = 'block';
+    document.getElementById('admin-pw').value = '';
+    document.getElementById('admin-pw').focus();
+  }
+}
+
+// ── Admin panel ─────────────────────────────────────────────────────────────
+function openAdmin() {
+  adminEntries = JSON.parse(JSON.stringify(ENTRIES));
+  document.getElementById('admin-panel').classList.add('open');
+  renderAdminList();
+}
+
+function closeAdmin() {
+  document.getElementById('admin-panel').classList.remove('open');
+  document.getElementById('save-status').className = 'save-status';
+}
+
+function renderAdminList() {
+  const list = document.getElementById('admin-entry-list');
+  document.getElementById('entry-count').textContent = adminEntries.length;
+  if (adminEntries.length === 0) {
+    list.innerHTML = '<div class="empty-note">No entries yet.</div>';
+    return;
+  }
+  const sorted = [...adminEntries].sort((a,b) => a.num - b.num);
+  list.innerHTML = sorted.map((e,i) => `
+    <div class="admin-entry-row">
+      <div class="admin-entry-num">SCP-${String(e.num).padStart(3,'0')}${e.suffix||''}</div>
+      <div class="admin-entry-name">${e.name} <span style="color:var(--text-dim);font-size:0.75rem;">[${e.cls}]</span></div>
+      <button class="admin-del" onclick="adminRemove(${adminEntries.indexOf(e)})">remove</button>
+    </div>`).join('');
+}
+
+function adminRemove(idx) {
+  adminEntries.splice(idx, 1);
+  renderAdminList();
+}
+
+function adminAddEntry() {
+  const numRaw = document.getElementById('a-num').value.trim();
+  const suffix = document.getElementById('a-suffix').value;
+  const name   = document.getElementById('a-name').value.trim();
+  const cls    = document.getElementById('a-class').value;
+  const desc   = document.getElementById('a-desc').value.trim();
+  const doc    = document.getElementById('a-doc').value.trim();
+  const num    = parseInt(numRaw);
+  const errEl  = document.getElementById('a-err');
+
+  if (!num || num < 1 || !name) { errEl.style.display = 'block'; return; }
+  errEl.style.display = 'none';
+
+  adminEntries.push({ num, suffix, name, cls, desc, doc });
+  ['a-num','a-name','a-desc','a-doc'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('a-class').value = 'Safe';
+  document.getElementById('a-suffix').value = '';
+  renderAdminList();
+}
+
+// ── Publish to GitHub ───────────────────────────────────────────────────────
+async function publishToGitHub() {
+  const status = document.getElementById('save-status');
+  const btn    = document.getElementById('publish-btn');
+
+  if (GITHUB_TOKEN === 'YOUR_TOKEN_HERE') {
+    status.className = 'save-status error';
+    status.textContent = '⚠ No token set. Paste your GitHub token into the GITHUB_TOKEN variable.';
+    return;
+  }
+
+  btn.disabled = true;
+  status.className = 'save-status saving';
+  status.textContent = '[ CONNECTING TO GITHUB... ]';
+
+  try {
+    // Get current file SHA
+    const infoRes = await fetch(
+      `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${GITHUB_FILE}`,
+      { headers: { Authorization: `token ${GITHUB_TOKEN}`, Accept: 'application/vnd.github.v3+json' } }
+    );
+    if (!infoRes.ok) throw new Error('Could not fetch file info from GitHub.');
+    const info = await infoRes.json();
+    const sha  = info.sha;
+
+    // Get current file content and replace the ENTRIES array
+    const currentContent = atob(info.content.replace(/\n/g,''));
+    const entriesJson = JSON.stringify(adminEntries, null, 2);
+    const newContent = currentContent.replace(
+      /const ENTRIES = \[[\s\S]*?\];/,
+      `const ENTRIES = ${entriesJson};`
+    );
+
+    status.textContent = '[ PUBLISHING... ]';
+
+    const updateRes = await fetch(
+      `https://api.github.com/repos/${GITHUB_OWNER}/${GITHUB_REPO}/contents/${GITHUB_FILE}`,
+      {
+        method: 'PUT',
+        headers: {
+          Authorization: `token ${GITHUB_TOKEN}`,
+          Accept: 'application/vnd.github.v3+json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({
+          message: `Admin: update SCP catalog entries`,
+          content: btoa(unescape(encodeURIComponent(newContent))),
+          sha
+        })
+      }
+    );
+
+    if (updateRes.ok) {
+      // Sync live ENTRIES array
+      adminEntries.forEach((e,i) => { ENTRIES[i] = e; });
+      ENTRIES.length = adminEntries.length;
+      render();
+      status.className = 'save-status success';
+      status.textContent = '[ PUBLISHED — site will update in ~30 seconds ]';
+    } else {
+      const err = await updateRes.json();
+      throw new Error(err.message || 'GitHub update failed.');
+    }
+  } catch(e) {
+    status.className = 'save-status error';
+    status.textContent = `⚠ ${e.message}`;
+  } finally {
+    btn.disabled = false;
+  }
+}
+
+document.getElementById('inp-num').addEventListener('keydown', e => { if(e.key==='Enter') saveEntry(); });
+document.getElementById('inp-name').addEventListener('keydown', e => { if(e.key==='Enter') saveEntry(); });
 
 render();
 </script>
