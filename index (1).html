@@ -1,0 +1,607 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SCP Foundation — Containment Database</title>
+<link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Barlow:wght@300;400;500;600&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --bg: #0a0b0d;
+    --surface: #111318;
+    --surface2: #181b22;
+    --border: #2a2e3a;
+    --border-bright: #3d4255;
+    --text: #c8cdd8;
+    --text-dim: #5a6070;
+    --text-bright: #e8ecf4;
+    --accent: #c8a84b;
+    --safe: #4a9e6b;
+    --safe-bg: #0d1f15;
+    --safe-border: #1e4830;
+    --euclid: #c8a84b;
+    --euclid-bg: #1e1800;
+    --euclid-border: #3d3210;
+    --keter: #c84b4b;
+    --keter-bg: #1f0d0d;
+    --keter-border: #481818;
+    --thaumiel: #7b6fc8;
+    --thaumiel-bg: #100f1f;
+    --thaumiel-border: #282060;
+    --pending: #5a6070;
+    --pending-bg: #111318;
+    --pending-border: #2a2e3a;
+  }
+
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+
+  body {
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Barlow', sans-serif;
+    font-weight: 300;
+    min-height: 100vh;
+    overflow-x: hidden;
+  }
+
+  /* scanline overlay */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: repeating-linear-gradient(0deg, transparent, transparent 2px, rgba(0,0,0,0.03) 2px, rgba(0,0,0,0.03) 4px);
+    pointer-events: none;
+    z-index: 1000;
+  }
+
+  header {
+    border-bottom: 1px solid var(--border);
+    padding: 2rem 2.5rem 1.5rem;
+    position: relative;
+  }
+
+  header::after {
+    content: '';
+    position: absolute;
+    bottom: -2px;
+    left: 0;
+    width: 100%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+    opacity: 0.4;
+  }
+
+  .header-top {
+    display: flex;
+    align-items: flex-start;
+    gap: 1.5rem;
+    margin-bottom: 1.25rem;
+  }
+
+  .logo {
+    width: 56px;
+    height: 56px;
+    flex-shrink: 0;
+    opacity: 0.85;
+  }
+
+  .header-text h1 {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 2rem;
+    font-weight: 700;
+    color: var(--text-bright);
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    line-height: 1;
+  }
+
+  .header-text .subtitle {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--text-dim);
+    letter-spacing: 0.15em;
+    margin-top: 4px;
+    text-transform: uppercase;
+  }
+
+  .controls {
+    display: flex;
+    gap: 10px;
+    flex-wrap: wrap;
+    align-items: center;
+  }
+
+  .search-wrap {
+    flex: 1;
+    min-width: 220px;
+    position: relative;
+  }
+
+  .search-wrap svg {
+    position: absolute;
+    left: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    opacity: 0.35;
+    pointer-events: none;
+  }
+
+  #search {
+    width: 100%;
+    padding: 10px 12px 10px 38px;
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    color: var(--text-bright);
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.82rem;
+    letter-spacing: 0.05em;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  #search::placeholder { color: var(--text-dim); }
+  #search:focus { border-color: var(--border-bright); }
+
+  .add-btn {
+    padding: 10px 20px;
+    background: transparent;
+    border: 1px solid var(--accent);
+    border-radius: 4px;
+    color: var(--accent);
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.9rem;
+    font-weight: 600;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: background 0.2s, color 0.2s;
+    white-space: nowrap;
+  }
+  .add-btn:hover { background: var(--accent); color: #000; }
+
+  main {
+    padding: 2rem 2.5rem;
+    max-width: 960px;
+  }
+
+  .class-section {
+    margin-bottom: 2.5rem;
+    animation: fadeIn 0.3s ease;
+  }
+
+  @keyframes fadeIn { from { opacity: 0; transform: translateY(6px); } to { opacity: 1; transform: translateY(0); } }
+
+  .section-label {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 12px;
+  }
+
+  .class-tag {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.75rem;
+    font-weight: 700;
+    letter-spacing: 0.18em;
+    text-transform: uppercase;
+    padding: 4px 12px;
+    border-radius: 2px;
+    border-left: 3px solid;
+  }
+
+  .class-tag.safe     { color: var(--safe);     background: var(--safe-bg);     border-color: var(--safe); }
+  .class-tag.euclid   { color: var(--euclid);   background: var(--euclid-bg);   border-color: var(--euclid); }
+  .class-tag.keter    { color: var(--keter);     background: var(--keter-bg);    border-color: var(--keter); }
+  .class-tag.thaumiel { color: var(--thaumiel); background: var(--thaumiel-bg); border-color: var(--thaumiel); }
+  .class-tag.pending  { color: var(--pending);   background: var(--pending-bg);  border-color: var(--pending); }
+
+  .entry-count {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--text-dim);
+    letter-spacing: 0.1em;
+  }
+
+  .divider {
+    flex: 1;
+    height: 1px;
+    background: var(--border);
+  }
+
+  .entries { display: flex; flex-direction: column; gap: 6px; }
+
+  .scp-card {
+    background: var(--surface);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    padding: 12px 16px;
+    display: grid;
+    grid-template-columns: 110px 1fr;
+    gap: 0 16px;
+    align-items: start;
+    transition: border-color 0.15s;
+  }
+
+  .scp-card:hover { border-color: var(--border-bright); }
+  .scp-card.safe     { border-left: 2px solid var(--safe); }
+  .scp-card.euclid   { border-left: 2px solid var(--euclid); }
+  .scp-card.keter    { border-left: 2px solid var(--keter); }
+  .scp-card.thaumiel { border-left: 2px solid var(--thaumiel); }
+  .scp-card.pending  { border-left: 2px solid var(--pending); }
+
+  .scp-number {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.88rem;
+    color: var(--text-dim);
+    padding-top: 2px;
+    letter-spacing: 0.05em;
+  }
+
+  .scp-name {
+    font-size: 0.95rem;
+    font-weight: 500;
+    color: var(--text-bright);
+    line-height: 1.3;
+  }
+
+  .scp-desc {
+    font-size: 0.82rem;
+    color: var(--text-dim);
+    margin-top: 3px;
+    line-height: 1.5;
+    font-weight: 300;
+  }
+
+  .empty-note {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.75rem;
+    color: var(--text-dim);
+    padding: 10px 0 4px;
+    letter-spacing: 0.05em;
+  }
+
+  /* Modal */
+  .modal-overlay {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.7);
+    z-index: 500;
+    align-items: center;
+    justify-content: center;
+    backdrop-filter: blur(2px);
+  }
+  .modal-overlay.open { display: flex; }
+
+  .modal {
+    background: var(--surface2);
+    border: 1px solid var(--border-bright);
+    border-radius: 6px;
+    padding: 2rem;
+    width: 400px;
+    max-width: 95vw;
+    position: relative;
+  }
+
+  .modal::before {
+    content: '';
+    position: absolute;
+    top: -1px; left: 10%; right: 10%;
+    height: 1px;
+    background: linear-gradient(90deg, transparent, var(--accent), transparent);
+    opacity: 0.6;
+  }
+
+  .modal-title {
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 1.1rem;
+    font-weight: 700;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--text-bright);
+    margin-bottom: 1.5rem;
+  }
+
+  .field { margin-bottom: 14px; }
+
+  .field label {
+    display: block;
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.7rem;
+    letter-spacing: 0.12em;
+    color: var(--text-dim);
+    text-transform: uppercase;
+    margin-bottom: 5px;
+  }
+
+  .field input,
+  .field select,
+  .field textarea {
+    width: 100%;
+    padding: 9px 12px;
+    background: var(--bg);
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    color: var(--text-bright);
+    font-family: 'Barlow', sans-serif;
+    font-size: 0.9rem;
+    outline: none;
+    transition: border-color 0.2s;
+  }
+
+  .field input:focus,
+  .field select:focus,
+  .field textarea:focus { border-color: var(--accent); }
+
+  .field textarea { resize: vertical; min-height: 80px; font-weight: 300; }
+
+  .field select option { background: var(--surface2); }
+
+  .modal-actions {
+    display: flex;
+    gap: 10px;
+    justify-content: flex-end;
+    margin-top: 1.5rem;
+  }
+
+  .btn-cancel {
+    padding: 9px 18px;
+    background: transparent;
+    border: 1px solid var(--border);
+    border-radius: 4px;
+    color: var(--text-dim);
+    font-family: 'Barlow', sans-serif;
+    font-size: 0.9rem;
+    cursor: pointer;
+    transition: border-color 0.2s, color 0.2s;
+  }
+  .btn-cancel:hover { border-color: var(--border-bright); color: var(--text); }
+
+  .btn-save {
+    padding: 9px 22px;
+    background: var(--accent);
+    border: 1px solid var(--accent);
+    border-radius: 4px;
+    color: #000;
+    font-family: 'Barlow Condensed', sans-serif;
+    font-size: 0.95rem;
+    font-weight: 700;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    cursor: pointer;
+    transition: opacity 0.2s;
+  }
+  .btn-save:hover { opacity: 0.85; }
+
+  .error-msg {
+    font-family: 'Share Tech Mono', monospace;
+    font-size: 0.72rem;
+    color: var(--keter);
+    margin-top: 1rem;
+    display: none;
+  }
+
+  @media (max-width: 600px) {
+    header, main { padding-left: 1.25rem; padding-right: 1.25rem; }
+    .scp-card { grid-template-columns: 90px 1fr; }
+  }
+</style>
+</head>
+<body>
+
+<header>
+  <div class="header-top">
+    <svg class="logo" viewBox="0 0 100 100" fill="none" xmlns="http://www.w3.org/2000/svg">
+      <circle cx="50" cy="50" r="48" stroke="#c8a84b" stroke-width="2"/>
+      <circle cx="50" cy="50" r="36" stroke="#c8a84b" stroke-width="1" stroke-dasharray="4 4"/>
+      <circle cx="50" cy="50" r="10" fill="none" stroke="#c8a84b" stroke-width="2"/>
+      <line x1="50" y1="14" x2="50" y2="40" stroke="#c8a84b" stroke-width="1.5"/>
+      <line x1="50" y1="60" x2="50" y2="86" stroke="#c8a84b" stroke-width="1.5"/>
+      <line x1="14" y1="50" x2="40" y2="50" stroke="#c8a84b" stroke-width="1.5"/>
+      <line x1="60" y1="50" x2="86" y2="50" stroke="#c8a84b" stroke-width="1.5"/>
+      <line x1="24" y1="24" x2="43" y2="43" stroke="#c8a84b" stroke-width="1"/>
+      <line x1="57" y1="57" x2="76" y2="76" stroke="#c8a84b" stroke-width="1"/>
+      <line x1="76" y1="24" x2="57" y2="43" stroke="#c8a84b" stroke-width="1"/>
+      <line x1="43" y1="57" x2="24" y2="76" stroke="#c8a84b" stroke-width="1"/>
+    </svg>
+    <div class="header-text">
+      <h1>SCP Foundation</h1>
+      <div class="subtitle">Secure · Contain · Protect — Containment Database</div>
+    </div>
+  </div>
+  <div class="controls">
+    <div class="search-wrap">
+      <svg width="15" height="15" viewBox="0 0 15 15" fill="none">
+        <circle cx="6.5" cy="6.5" r="5" stroke="#c8cdd8" stroke-width="1.4"/>
+        <line x1="10.5" y1="10.5" x2="14" y2="14" stroke="#c8cdd8" stroke-width="1.4" stroke-linecap="round"/>
+      </svg>
+      <input type="text" id="search" placeholder="Search entries..." oninput="render()">
+    </div>
+    <button class="add-btn" onclick="openModal()">+ Log Entry</button>
+  </div>
+</header>
+
+<main>
+  <div id="sections"></div>
+</main>
+
+<!-- Modal -->
+<div class="modal-overlay" id="modal" onclick="overlayClick(event)">
+  <div class="modal">
+    <div class="modal-title">Submit Entry for Review</div>
+    <div class="field">
+      <label>SCP Number</label>
+      <input type="number" id="inp-num" placeholder="e.g. 173" min="1">
+    </div>
+    <div class="field">
+      <label>Designation / Name</label>
+      <input type="text" id="inp-name" placeholder="e.g. The Sculpture">
+    </div>
+    <div class="field">
+      <label>Object Class</label>
+      <select id="inp-class">
+        <option value="Safe">Safe</option>
+        <option value="Euclid">Euclid</option>
+        <option value="Keter">Keter</option>
+        <option value="Thaumiel">Thaumiel</option>
+        <option value="Pending">Pending</option>
+      </select>
+    </div>
+    <div class="field">
+      <label>Brief Description (optional)</label>
+      <textarea id="inp-desc" placeholder="Short summary of the anomaly..."></textarea>
+    </div>
+    <div class="field">
+      <label>Your Discord Username</label>
+      <input type="text" id="inp-discord" placeholder="e.g. username#0000">
+    </div>
+    <div class="field">
+      <label>Document Link (Google Doc, etc.)</label>
+      <input type="url" id="inp-doc" placeholder="https://docs.google.com/...">
+    </div>
+    <div class="error-msg" id="err">⚠ Please enter a valid number and name.</div>
+    <div class="submit-note" id="submit-note" style="font-family:'Share Tech Mono',monospace;font-size:0.7rem;color:var(--text-dim);margin-top:10px;line-height:1.6;">
+      Your submission will be reviewed before it appears on the catalog.
+    </div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeModal()">Cancel</button>
+      <button class="btn-save" id="submit-btn" onclick="saveEntry()">Submit</button>
+    </div>
+  </div>
+</div>
+
+<!-- Success Modal -->
+<div class="modal-overlay" id="success-modal" onclick="document.getElementById('success-modal').classList.remove('open')">
+  <div class="modal" style="text-align:center;">
+    <div style="font-size:2rem;margin-bottom:1rem;">✓</div>
+    <div class="modal-title" style="margin-bottom:0.5rem;">Submission Received</div>
+    <p style="font-size:0.85rem;color:var(--text-dim);line-height:1.6;margin-bottom:1.5rem;">Your entry has been sent for review. If approved, it will be added to the catalog.</p>
+    <button class="btn-save" onclick="document.getElementById('success-modal').classList.remove('open')" style="width:100%;">Close</button>
+  </div>
+</div>
+
+<script>
+// ─── PASTE YOUR FORMSPREE ENDPOINT BELOW ───────────────────────────────────
+const FORMSPREE_URL = "https://formspree.io/f/YOUR_FORM_ID";
+// ───────────────────────────────────────────────────────────────────────────
+
+// ─── ADD YOUR APPROVED ENTRIES HERE ────────────────────────────────────────
+const ENTRIES = [
+  // { num: 173, name: "The Sculpture", cls: "Euclid", desc: "Animate concrete statue.", doc: "" },
+];
+// ───────────────────────────────────────────────────────────────────────────
+
+const CLASSES = ["Safe","Euclid","Keter","Thaumiel","Pending"];
+
+function openModal() {
+  document.getElementById('modal').classList.add('open');
+  document.getElementById('err').style.display = 'none';
+  document.getElementById('submit-btn').disabled = false;
+  document.getElementById('submit-btn').textContent = 'Submit';
+  setTimeout(() => document.getElementById('inp-num').focus(), 50);
+}
+
+function closeModal() {
+  document.getElementById('modal').classList.remove('open');
+  ['inp-num','inp-name','inp-desc','inp-discord','inp-doc'].forEach(id => document.getElementById(id).value = '');
+  document.getElementById('inp-class').value = 'Safe';
+}
+
+function overlayClick(e) {
+  if (e.target === document.getElementById('modal')) closeModal();
+}
+
+async function saveEntry() {
+  const num = parseInt(document.getElementById('inp-num').value);
+  const name = document.getElementById('inp-name').value.trim();
+  const cls = document.getElementById('inp-class').value;
+  const desc = document.getElementById('inp-desc').value.trim();
+  const discord = document.getElementById('inp-discord').value.trim();
+  const doc = document.getElementById('inp-doc').value.trim();
+
+  if (!num || num < 1 || !name) {
+    document.getElementById('err').style.display = 'block';
+    return;
+  }
+
+  const btn = document.getElementById('submit-btn');
+  btn.disabled = true;
+  btn.textContent = 'Sending...';
+
+  try {
+    const res = await fetch(FORMSPREE_URL, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+      body: JSON.stringify({
+        scp_number: `SCP-${String(num).padStart(3,'0')}`,
+        name,
+        object_class: cls,
+        description: desc || '(none)',
+        discord_username: discord || '(not provided)',
+        document_link: doc || '(not provided)'
+      })
+    });
+
+    if (res.ok) {
+      closeModal();
+      document.getElementById('success-modal').classList.add('open');
+    } else {
+      btn.disabled = false;
+      btn.textContent = 'Submit';
+      document.getElementById('err').textContent = '⚠ Submission failed. Please try again.';
+      document.getElementById('err').style.display = 'block';
+    }
+  } catch {
+    btn.disabled = false;
+    btn.textContent = 'Submit';
+    document.getElementById('err').textContent = '⚠ Network error. Please try again.';
+    document.getElementById('err').style.display = 'block';
+  }
+}
+
+function render() {
+  const q = document.getElementById('search').value.toLowerCase();
+  const filtered = ENTRIES.filter(e =>
+    String(e.num).includes(q) ||
+    e.name.toLowerCase().includes(q) ||
+    (e.desc && e.desc.toLowerCase().includes(q))
+  );
+  const container = document.getElementById('sections');
+  container.innerHTML = '';
+  CLASSES.forEach(cls => {
+    const group = filtered.filter(e => e.cls === cls).sort((a, b) => a.num - b.num);
+    const totalInClass = ENTRIES.filter(e => e.cls === cls).length;
+    const sec = document.createElement('div');
+    sec.className = 'class-section';
+    const clsKey = cls.toLowerCase();
+    sec.innerHTML = `
+      <div class="section-label">
+        <span class="class-tag ${clsKey}">${cls}</span>
+        <span class="entry-count">${totalInClass} ENTR${totalInClass === 1 ? 'Y' : 'IES'}</span>
+        <div class="divider"></div>
+      </div>
+      <div class="entries">
+        ${group.length === 0
+          ? `<div class="empty-note">[ NO ${q ? 'MATCHING ' : ''}ENTRIES ]</div>`
+          : group.map(e => `
+            <div class="scp-card ${clsKey}">
+              <div class="scp-number">SCP-${String(e.num).padStart(3,'0')}</div>
+              <div>
+                <div class="scp-name">${e.name}</div>
+                ${e.desc ? `<div class="scp-desc">${e.desc}</div>` : ''}
+                ${e.doc ? `<a href="${e.doc}" target="_blank" style="font-size:0.75rem;color:var(--accent);text-decoration:none;font-family:'Share Tech Mono',monospace;letter-spacing:0.05em;">[ VIEW DOCUMENT ]</a>` : ''}
+              </div>
+            </div>`).join('')}
+      </div>`;
+    container.appendChild(sec);
+  });
+}
+
+document.getElementById('inp-num').addEventListener('keydown', e => { if (e.key === 'Enter') saveEntry(); });
+document.getElementById('inp-name').addEventListener('keydown', e => { if (e.key === 'Enter') saveEntry(); });
+
+render();
+</script>
+</body>
+</html>
