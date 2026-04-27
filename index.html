@@ -153,7 +153,7 @@
   .scp-desc { font-size: 0.82rem; color: var(--text-dim); margin-top: 3px; line-height: 1.5; }
   .empty-note { font-family: 'Share Tech Mono', monospace; font-size: 0.75rem; color: var(--text-dim); padding: 10px 0 4px; letter-spacing: 0.05em; }
 
-  /* ── Modals ── */
+  /* ââ Modals ââ */
   .modal-overlay {
     display: none; position: fixed; inset: 0;
     background: rgba(0,0,0,0.75); z-index: 500;
@@ -211,7 +211,7 @@
 
   .error-msg { font-family: 'Share Tech Mono', monospace; font-size: 0.72rem; color: var(--keter); margin-top: 1rem; display: none; }
 
-  /* ── Admin Panel ── */
+  /* ââ Admin Panel ââ */
   .admin-panel {
     display: none; position: fixed; inset: 0;
     background: var(--bg); z-index: 600; overflow-y: auto;
@@ -352,7 +352,7 @@
     </svg>
     <div class="header-text">
       <h1>SCP Foundation</h1>
-      <div class="subtitle">Secure · Contain · Protect — Containment Database</div>
+      <div class="subtitle">Secure Â· Contain Â· Protect â Containment Database</div>
     </div>
   </div>
   <div class="controls">
@@ -604,28 +604,59 @@
 </div>
 
 <script>
-// ─── CONFIG ────────────────────────────────────────────────────────────────
+// âââ CONFIG ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 const FORMSPREE_URL  = "https://formspree.io/f/mnjlyjqp";
 const BOT_URL        = "https://scp-bot-production-9654.up.railway.app/notify";
-let GITHUB_TOKEN = ""; // set at login time — never stored in file
+let GITHUB_TOKEN = ""; // set at login time â never stored in file
 const GITHUB_OWNER   = "phoenixdoubleo";
 const GITHUB_REPO    = "scpsr-catalog";
 const GITHUB_FILE    = "index.html";
 const ADMIN_PASSWORD  = "MajorRedIsCool";
 const VIEWER_PASSWORD = "test";
 let canPublish = false;
-// ───────────────────────────────────────────────────────────────────────────
+// âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 
-// ─── ADD APPROVED ENTRIES HERE ─────────────────────────────────────────────
+// âââ ADD APPROVED ENTRIES HERE âââââââââââââââââââââââââââââââââââââââââââââ
 const ENTRIES = [
-  // { num: 173, suffix: "", name: "The Sculpture", cls: "Euclid", desc: "Animate concrete statue.", doc: "https://..." },
+  {
+    "num": 7215,
+    "suffix": "-N",
+    "name": "The Frogman / [red0_0]",
+    "cls": "Pending",
+    "desc": "SCP-7215-N is a tall, lanky humanoid creature completely made of fishing net web fabrics/meshes. It has no visible orifices anywhere on its body, with barbed hooks, needles, and thin fishing line regularly protruding from various parts of its body except for on the hands and feet. These protrusions grow at a moderate rate after consuming any material other than animal flesh. SCP-7215-N is capable of agile and quick movements, however is mostly idle and motionless when not relocating itself or in pursuit of prey. It’s a carnivorous, nocturnal, and intelligent entity that feeds on prey using an opportunistic ambush approach or by pacifying prey with compound-7215. \n\nSCP-7215-N is able to secret an odorless, tasteless, and nearly colorless chemical through its ‘skin’ that instantly evaporates into the air when released, now deemed compound-7215. When any animal besides humans come into contact with compound-7215, they seem to undergo a state of pacification where they become extremely docile no matter the surrounding situation. When a human comes into contact with compound-7215, they’ll instead experience a heightened sense of fear, anxiety, and uneasiness, though won’t be able to pin where the source is coming from, or why they’re experiencing this phenomena. These experiences last until the subject has been removed from the area contaminated with compound-7215, but become stronger the longer one resides in a contaminated area.\n\n\nWhen any foreign item is ingested or thoroughly embedded into SCP-7215-N, it is capable of utilizing certain aspects and properties of that material for a limited period of time, essentially copying the properties of what was ingested/embedded. It seemingly can also choose when it wants to use this ability and what properties it wants to copy. With enough concentration however, it can instead 'absorb' items through the netting, where they visually sink into its body. However, this process is quite slow and requires significant focus in order to assimilate things into its body. Additionally, anything ingested, embedded, or absorbed can be stored inside SCP-7215 for a varying amount of time before they begin to digest within its body.\n\nWhen air humidity and the surrounding environment’s water levels drop, SCP-7215-N will become increasingly more aggressive and agitated, along with exhibiting erratic behavior. This will continue until the surrounding humidity reaches normal levels for it once again, or if it can delve itself into a large body of water.",
+    "doc": "https://docs.google.com/document/d/1KfCXtu-WmoqNzBEKv5Os7wWcIt1BdUhmOwdE_10MEBI/edit?usp=sharing"
+  },
+  {
+    "num": 9183,
+    "suffix": "-N",
+    "name": "N/A / [AttackTheUsers]",
+    "cls": "Pending",
+    "desc": "SCP-9183-N is a Caucasian male named Lucius Varran, approximately 24 years of age, standing 5 foot 11, and weighing 172 pounds. The subject has short brown hair, black colored eyes, and ritualistic markings across his chest, arms, and back.",
+    "doc": "https://docs.google.com/document/d/1gn5svrj2xTl8VpmLCSSyB5rryZ7iZ80YmAxr6gloetk/edit?tab=t.0"
+  },
+  {
+    "num": 343,
+    "suffix": "",
+    "name": "God / [N/A]",
+    "cls": "Safe",
+    "desc": "SCP-343 is a male, seemingly race-less, humanoid in appearance with apparent omnipotence. SCP-343 was discovered walking the streets of Prague and detained after a staff member witnessed him disappear from the streets and reappear on a rooftop. SCP-343 is detained willingly in his chamber, as containment has proved impossible (see notes).",
+    "doc": "https://docs.google.com/document/d/1jLbOvCWOZFENG5bYU2MFfRJi-iTGLcLbxvlYpA_j2L8/edit?tab=t.0"
+  },
+  {
+    "num": 181,
+    "suffix": "",
+    "name": "Lucky / [Didyou]",
+    "cls": "Safe",
+    "desc": "G████ O██████, formerly LvD-87465, had been incarcerated for repeated offenses of defrauding the Nevada Gaming Commission. Following the 18th month of his life sentence, he was quietly moved to Armed Reliquary Containment Area-02, where he was initiated and assigned a Level D clearance. His first exposure experiment was with SCP-███, and the results were bloody but expected. When LvD-65468 was exposed to SCP-███, he rampaged and killed those in the room, but SCP-181 was spared when an armed response team put down LvD-65468.",
+    "doc": "https://docs.google.com/document/d/1Qwk_qmrSvxEEW3pl5uQBrGkM0qpyTZefIsrgv7b0c7o/edit?tab=t.0"
+  }
 ];
-// ───────────────────────────────────────────────────────────────────────────
+// âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 
 const CLASSES = ["Safe","Euclid","Keter","Thaumiel","Pending"];
 let adminEntries = JSON.parse(JSON.stringify(ENTRIES));
 
-// ── Public submit form ──────────────────────────────────────────────────────
+// ââ Public submit form ââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 function blockLetters(e) {
   const allowed = ['Backspace','Delete','ArrowLeft','ArrowRight','Tab','Home','End'];
   if (allowed.includes(e.key)) return;
@@ -666,7 +697,7 @@ async function saveEntry() {
   const errEl   = document.getElementById('err');
 
   if (!num || num < 1 || !name || !desc || !discord || !doc) {
-    errEl.textContent = '⚠ All fields are required.';
+    errEl.textContent = 'â  All fields are required.';
     errEl.style.display = 'block'; return;
   }
 
@@ -698,17 +729,17 @@ async function saveEntry() {
       document.getElementById('success-modal').classList.add('open');
     } else {
       btn.disabled = false; btn.textContent = 'Submit';
-      errEl.textContent = '⚠ Submission failed. Please try again.';
+      errEl.textContent = 'â  Submission failed. Please try again.';
       errEl.style.display = 'block';
     }
   } catch {
     btn.disabled = false; btn.textContent = 'Submit';
-    errEl.textContent = '⚠ Network error. Please try again.';
+    errEl.textContent = 'â  Network error. Please try again.';
     errEl.style.display = 'block';
   }
 }
 
-// ── Main catalog render ─────────────────────────────────────────────────────
+// ââ Main catalog render âââââââââââââââââââââââââââââââââââââââââââââââââââââ
 function render() {
   const q = document.getElementById('search').value.toLowerCase();
   const filtered = ENTRIES.filter(e =>
@@ -747,7 +778,7 @@ function render() {
   });
 }
 
-// ── Admin login ─────────────────────────────────────────────────────────────
+// ââ Admin login âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 function openAdminLogin() {
   document.getElementById('admin-login').classList.add('open');
   document.getElementById('admin-err').style.display = 'none';
@@ -781,7 +812,7 @@ function checkAdminPw() {
   }
 }
 
-// ── Admin panel ─────────────────────────────────────────────────────────────
+// ââ Admin panel âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 function openAdmin() {
   adminEntries = JSON.parse(JSON.stringify(ENTRIES));
   document.getElementById('admin-panel').classList.add('open');
@@ -938,20 +969,20 @@ function adminAddEntry() {
   renderAdminList();
 }
 
-// ── Publish to GitHub ───────────────────────────────────────────────────────
+// ââ Publish to GitHub âââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 async function publishToGitHub() {
   const status = document.getElementById('save-status');
   const btn    = document.getElementById('publish-btn');
 
   if (!canPublish) {
     status.className = 'save-status error';
-    status.textContent = '⚠ Your account does not have publish access.';
+    status.textContent = 'â  Your account does not have publish access.';
     return;
   }
 
   if (!GITHUB_TOKEN || !GITHUB_TOKEN.startsWith('ghp_')) {
     status.className = 'save-status error';
-    status.textContent = '⚠ No token. Please log out and log back in with your GitHub token.';
+    status.textContent = 'â  No token. Please log out and log back in with your GitHub token.';
     return;
   }
 
@@ -1002,14 +1033,14 @@ async function publishToGitHub() {
       ENTRIES.length = adminEntries.length;
       render();
       status.className = 'save-status success';
-      status.textContent = '[ PUBLISHED — site will update in ~30 seconds ]';
+      status.textContent = '[ PUBLISHED â site will update in ~30 seconds ]';
     } else {
       const err = await updateRes.json();
       throw new Error(err.message || 'GitHub update failed.');
     }
   } catch(e) {
     status.className = 'save-status error';
-    status.textContent = `⚠ ${e.message}`;
+    status.textContent = `â  ${e.message}`;
   } finally {
     btn.disabled = false;
   }
