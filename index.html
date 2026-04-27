@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SCP Foundation â Containment Database</title>
+<title>SCP Foundation — Containment Database</title>
 <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Barlow:wght@300;400;500;600&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -152,7 +152,7 @@
   .scp-desc { font-size: 0.82rem; color: var(--text-dim); margin-top: 3px; line-height: 1.5; }
   .empty-note { font-family: 'Share Tech Mono', monospace; font-size: 0.75rem; color: var(--text-dim); padding: 10px 0 4px; letter-spacing: 0.05em; }
 
-  /* ââ Modals ââ */
+  /* ── Modals ── */
   .modal-overlay {
     display: none; position: fixed; inset: 0;
     background: rgba(0,0,0,0.75); z-index: 500;
@@ -210,7 +210,7 @@
 
   .error-msg { font-family: 'Share Tech Mono', monospace; font-size: 0.72rem; color: var(--keter); margin-top: 1rem; display: none; }
 
-  /* ââ Admin Panel ââ */
+  /* ── Admin Panel ── */
   .admin-panel {
     display: none; position: fixed; inset: 0;
     background: var(--bg); z-index: 600; overflow-y: auto;
@@ -307,6 +307,24 @@
   }
   .instructions span { color: var(--accent); }
 
+  .admin-tab {
+    padding: 10px 22px; background: transparent; border: none;
+    border-bottom: 2px solid transparent; color: var(--text-dim);
+    font-family: 'Barlow Condensed', sans-serif; font-size: 0.9rem;
+    font-weight: 600; letter-spacing: 0.1em; text-transform: uppercase;
+    cursor: pointer; transition: color 0.2s, border-color 0.2s;
+    margin-bottom: -1px;
+  }
+  .admin-tab:hover { color: var(--text); }
+  .admin-tab.active { color: var(--accent); border-bottom-color: var(--accent); }
+
+  .admin-edit-btn {
+    font-family: 'Share Tech Mono', monospace; font-size: 0.7rem; color: var(--accent);
+    background: none; border: 1px solid var(--euclid-bg); border-radius: 3px;
+    padding: 3px 8px; cursor: pointer; opacity: 0.7; transition: opacity 0.2s;
+  }
+  .admin-edit-btn:hover { opacity: 1; }
+
   @media (max-width: 600px) {
     header, main { padding-left: 1.25rem; padding-right: 1.25rem; }
     .scp-card { grid-template-columns: 90px 1fr; }
@@ -333,7 +351,7 @@
     </svg>
     <div class="header-text">
       <h1>SCP Foundation</h1>
-      <div class="subtitle">Secure Â· Contain Â· Protect â Containment Database</div>
+      <div class="subtitle">Secure · Contain · Protect — Containment Database</div>
     </div>
   </div>
   <div class="controls">
@@ -445,10 +463,17 @@
     <button class="admin-close" onclick="closeAdmin()">&#x2715; Close Panel</button>
   </div>
 
-  <div class="admin-grid">
-    <!-- Left: Add + Manage entries -->
-    <div>
-      <div class="admin-card" style="margin-bottom:1.5rem;">
+  <!-- Tabs -->
+  <div style="display:flex;gap:0;margin-bottom:2rem;border-bottom:1px solid var(--border);">
+    <button class="admin-tab active" id="tab-add" onclick="switchTab('add')">+ Add Entry</button>
+    <button class="admin-tab" id="tab-manage" onclick="switchTab('manage')">Manage Entries</button>
+    <button class="admin-tab" id="tab-publish" onclick="switchTab('publish')">Publish</button>
+  </div>
+
+  <!-- Tab: Add -->
+  <div id="panel-add">
+    <div class="admin-grid">
+      <div class="admin-card">
         <h3>Add New Entry</h3>
         <div class="admin-add-form">
           <div class="field">
@@ -456,7 +481,7 @@
             <div style="display:flex;gap:6px;align-items:center;">
               <span style="font-family:'Share Tech Mono',monospace;font-size:0.8rem;color:var(--text-dim);white-space:nowrap;">SCP-</span>
               <input type="text" inputmode="numeric" id="a-num" placeholder="173" style="flex:1;">
-              <select id="a-suffix" style="width:100px;">
+              <select id="a-suffix" style="width:110px;">
                 <option value="">&#8212; none &#8212;</option>
                 <option value="-N">-N (Pending)</option>
               </select>
@@ -488,24 +513,34 @@
           <button class="btn-add-entry" onclick="adminAddEntry()">+ Add to Catalog</button>
         </div>
       </div>
-
       <div class="admin-card">
-        <h3>Current Entries (<span id="entry-count">0</span>)</h3>
+        <h3>Pending Queue (<span id="entry-count">0</span>)</h3>
+        <p class="instructions" style="margin-bottom:1rem;">Entries added here are queued until you publish.</p>
         <div class="admin-entry-list" id="admin-entry-list"></div>
       </div>
     </div>
+  </div>
 
-    <!-- Right: Publish -->
-    <div>
-      <div class="admin-card" style="margin-bottom:1.5rem;">
+  <!-- Tab: Manage -->
+  <div id="panel-manage" style="display:none;">
+    <div class="admin-card" style="max-width:700px;">
+      <h3>Published Entries (<span id="live-count">0</span>)</h3>
+      <p class="instructions" style="margin-bottom:1rem;">Edit or remove entries that are already live. Changes go live after you publish.</p>
+      <div class="admin-entry-list" id="live-entry-list"></div>
+    </div>
+  </div>
+
+  <!-- Tab: Publish -->
+  <div id="panel-publish" style="display:none;">
+    <div class="admin-grid">
+      <div class="admin-card">
         <h3>Publish to Site</h3>
         <p class="instructions" style="margin-bottom:1rem;">
-          When you're done making changes, click <span>Publish</span> to save everything to GitHub. The site will update live for everyone within seconds.
+          When you are done making changes, click <span>Publish</span> to save everything to GitHub. The site will update live for everyone within ~30 seconds.
         </p>
         <button class="btn-publish" id="publish-btn" onclick="publishToGitHub()">&#8593; Publish Changes</button>
         <div class="save-status" id="save-status"></div>
       </div>
-
       <div class="admin-card">
         <h3>Setup</h3>
         <p class="instructions">
@@ -513,7 +548,7 @@
           2. Developer settings &#8594; Personal access tokens &#8594; Tokens (classic)<br>
           3. Generate new token with <span>repo</span> scope<br>
           4. Copy the <span>ghp_...</span> token<br>
-          5. Log into this panel â paste the token when prompted<br><br>
+          5. Log into this panel &#8594; paste token when prompted<br><br>
           The token is only held in memory for your session. It is never written to the file or committed to GitHub.
         </p>
       </div>
@@ -521,33 +556,71 @@
   </div>
 </div>
 
+<!-- Edit Entry Modal -->
+<div class="modal-overlay" id="edit-modal" onclick="editOverlayClick(event)">
+  <div class="modal" style="width:420px;">
+    <div class="modal-title">Edit Entry</div>
+    <div class="field">
+      <label>SCP Number</label>
+      <div style="display:flex;gap:6px;align-items:center;">
+        <span style="font-family:'Share Tech Mono',monospace;font-size:0.8rem;color:var(--text-dim);white-space:nowrap;">SCP-</span>
+        <input type="text" inputmode="numeric" id="e-num" placeholder="173" style="flex:1;">
+        <select id="e-suffix" style="width:110px;">
+          <option value="">&#8212; none &#8212;</option>
+          <option value="-N">-N (Pending)</option>
+        </select>
+      </div>
+    </div>
+    <div class="field">
+      <label>Name</label>
+      <input type="text" id="e-name" placeholder="The Sculpture">
+    </div>
+    <div class="field">
+      <label>Object Class</label>
+      <select id="e-class">
+        <option value="Safe">Safe</option>
+        <option value="Euclid">Euclid</option>
+        <option value="Keter">Keter</option>
+        <option value="Thaumiel">Thaumiel</option>
+        <option value="Pending">Pending</option>
+      </select>
+    </div>
+    <div class="field">
+      <label>Description</label>
+      <textarea id="e-desc" placeholder="Short summary..."></textarea>
+    </div>
+    <div class="field">
+      <label>Document Link</label>
+      <input type="url" id="e-doc" placeholder="https://docs.google.com/...">
+    </div>
+    <div class="error-msg" id="e-err">&#9888; Number and name are required.</div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeEditModal()">Cancel</button>
+      <button class="btn-save" onclick="saveEdit()">Save Changes</button>
+    </div>
+  </div>
+</div>
+
 <script>
-// âââ CONFIG ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+// ─── CONFIG ────────────────────────────────────────────────────────────────
 const FORMSPREE_URL  = "https://formspree.io/f/mnjlyjqp";
-let GITHUB_TOKEN = ""; // set at login time â never stored in file
+let GITHUB_TOKEN = ""; // set at login time — never stored in file
 const GITHUB_OWNER   = "phoenixdoubleo";
 const GITHUB_REPO    = "scpsr-catalog";
 const GITHUB_FILE    = "index.html";
 const ADMIN_PASSWORD = "MajorRedIsCool";
-// âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+// ───────────────────────────────────────────────────────────────────────────
 
-// âââ ADD APPROVED ENTRIES HERE âââââââââââââââââââââââââââââââââââââââââââââ
+// ─── ADD APPROVED ENTRIES HERE ─────────────────────────────────────────────
 const ENTRIES = [
-  {
-    "num": 3,
-    "suffix": "",
-    "name": "f",
-    "cls": "Safe",
-    "desc": "f",
-    "doc": "f"
-  }
+  // { num: 173, suffix: "", name: "The Sculpture", cls: "Euclid", desc: "Animate concrete statue.", doc: "https://..." },
 ];
-// âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+// ───────────────────────────────────────────────────────────────────────────
 
 const CLASSES = ["Safe","Euclid","Keter","Thaumiel","Pending"];
 let adminEntries = JSON.parse(JSON.stringify(ENTRIES));
 
-// ââ Public submit form ââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+// ── Public submit form ──────────────────────────────────────────────────────
 function blockLetters(e) {
   const allowed = ['Backspace','Delete','ArrowLeft','ArrowRight','Tab','Home','End'];
   if (allowed.includes(e.key)) return;
@@ -588,7 +661,7 @@ async function saveEntry() {
   const errEl   = document.getElementById('err');
 
   if (!num || num < 1 || !name || !desc || !discord || !doc) {
-    errEl.textContent = 'â  All fields are required.';
+    errEl.textContent = '⚠ All fields are required.';
     errEl.style.display = 'block'; return;
   }
 
@@ -610,17 +683,17 @@ async function saveEntry() {
       document.getElementById('success-modal').classList.add('open');
     } else {
       btn.disabled = false; btn.textContent = 'Submit';
-      errEl.textContent = 'â  Submission failed. Please try again.';
+      errEl.textContent = '⚠ Submission failed. Please try again.';
       errEl.style.display = 'block';
     }
   } catch {
     btn.disabled = false; btn.textContent = 'Submit';
-    errEl.textContent = 'â  Network error. Please try again.';
+    errEl.textContent = '⚠ Network error. Please try again.';
     errEl.style.display = 'block';
   }
 }
 
-// ââ Main catalog render âââââââââââââââââââââââââââââââââââââââââââââââââââââ
+// ── Main catalog render ─────────────────────────────────────────────────────
 function render() {
   const q = document.getElementById('search').value.toLowerCase();
   const filtered = ENTRIES.filter(e =>
@@ -659,7 +732,7 @@ function render() {
   });
 }
 
-// ââ Admin login âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+// ── Admin login ─────────────────────────────────────────────────────────────
 function openAdminLogin() {
   document.getElementById('admin-login').classList.add('open');
   document.getElementById('admin-err').style.display = 'none';
@@ -688,11 +761,52 @@ function checkAdminPw() {
   }
 }
 
-// ââ Admin panel âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+// ── Admin panel ─────────────────────────────────────────────────────────────
 function openAdmin() {
   adminEntries = JSON.parse(JSON.stringify(ENTRIES));
   document.getElementById('admin-panel').classList.add('open');
+  switchTab('add');
   renderAdminList();
+  renderLiveList();
+  // Block letters in admin number fields
+  ['a-num', 'e-num'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) {
+      el.addEventListener('keydown', blockLetters);
+      el.addEventListener('input', () => { el.value = el.value.replace(/[^0-9]/g,''); });
+    }
+  });
+}
+
+function switchTab(tab) {
+  ['add','manage','publish'].forEach(t => {
+    document.getElementById('panel-' + t).style.display = t === tab ? '' : 'none';
+    document.getElementById('tab-' + t).classList.toggle('active', t === tab);
+  });
+}
+
+function renderLiveList() {
+  const list = document.getElementById('live-entry-list');
+  document.getElementById('live-count').textContent = adminEntries.length;
+  if (adminEntries.length === 0) {
+    list.innerHTML = '<div class="empty-note">No published entries yet.</div>';
+    return;
+  }
+  const indexed = adminEntries.map((e, i) => ({ e, i })).sort((a,b) => a.e.num - b.e.num);
+  list.innerHTML = indexed.map(({ e, i }) => `
+    <div class="admin-entry-row">
+      <div class="admin-entry-num">SCP-${String(e.num).padStart(3,'0')}${e.suffix||''}</div>
+      <div class="admin-entry-name">${e.name} <span style="color:var(--text-dim);font-size:0.75rem;">[${e.cls}]</span></div>
+      <button class="admin-edit-btn" onclick="openEditModal(${i}, true)">edit</button>
+      <button class="admin-del" onclick="liveRemove(${i})">remove</button>
+    </div>`).join('');
+}
+
+function liveRemove(idx) {
+  if (!confirm('Remove "' + adminEntries[idx].name + '" from the catalog? Publish afterwards to go live.')) return;
+  adminEntries.splice(idx, 1);
+  renderLiveList();
+  document.getElementById('live-count').textContent = adminEntries.length;
 }
 
 function closeAdmin() {
@@ -707,18 +821,69 @@ function renderAdminList() {
     list.innerHTML = '<div class="empty-note">No entries yet.</div>';
     return;
   }
-  const sorted = [...adminEntries].sort((a,b) => a.num - b.num);
-  list.innerHTML = sorted.map((e,i) => `
+  // Sort by index pairs so we always use the real adminEntries index
+  const indexed = adminEntries.map((e, i) => ({ e, i })).sort((a,b) => a.e.num - b.e.num);
+  list.innerHTML = indexed.map(({ e, i }) => `
     <div class="admin-entry-row">
       <div class="admin-entry-num">SCP-${String(e.num).padStart(3,'0')}${e.suffix||''}</div>
       <div class="admin-entry-name">${e.name} <span style="color:var(--text-dim);font-size:0.75rem;">[${e.cls}]</span></div>
-      <button class="admin-del" onclick="adminRemove(${adminEntries.indexOf(e)})">remove</button>
+      <button class="admin-edit-btn" onclick="openEditModal(${i}, false)">edit</button>
+      <button class="admin-del" onclick="adminRemove(${i})">remove</button>
     </div>`).join('');
 }
 
 function adminRemove(idx) {
+  if (!confirm(`Remove ${adminEntries[idx].name}? This won't publish until you click Publish.`)) return;
   adminEntries.splice(idx, 1);
   renderAdminList();
+}
+
+let editIdx = -1;
+let editFromLive = false;
+
+function openEditModal(idx, fromLive) {
+  editIdx = idx;
+  editFromLive = !!fromLive;
+  const e = adminEntries[idx];
+  document.getElementById('e-num').value = e.num;
+  document.getElementById('e-suffix').value = e.suffix || '';
+  document.getElementById('e-name').value = e.name;
+  document.getElementById('e-class').value = e.cls;
+  document.getElementById('e-desc').value = e.desc || '';
+  document.getElementById('e-doc').value = e.doc || '';
+  document.getElementById('e-err').style.display = 'none';
+  document.getElementById('edit-modal').classList.add('open');
+}
+
+function closeEditModal() {
+  document.getElementById('edit-modal').classList.remove('open');
+  editIdx = -1;
+}
+
+function editOverlayClick(e) {
+  if (e.target === document.getElementById('edit-modal')) closeEditModal();
+}
+
+function saveEdit() {
+  const num  = parseInt(document.getElementById('e-num').value.trim());
+  const name = document.getElementById('e-name').value.trim();
+  if (!num || num < 1 || !name) {
+    document.getElementById('e-err').style.display = 'block'; return;
+  }
+  adminEntries[editIdx] = {
+    num,
+    suffix: document.getElementById('e-suffix').value,
+    name,
+    cls:  document.getElementById('e-class').value,
+    desc: document.getElementById('e-desc').value.trim(),
+    doc:  document.getElementById('e-doc').value.trim()
+  };
+  closeEditModal();
+  if (editFromLive) {
+    renderLiveList();
+  } else {
+    renderAdminList();
+  }
 }
 
 function adminAddEntry() {
@@ -741,14 +906,14 @@ function adminAddEntry() {
   renderAdminList();
 }
 
-// ââ Publish to GitHub âââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+// ── Publish to GitHub ───────────────────────────────────────────────────────
 async function publishToGitHub() {
   const status = document.getElementById('save-status');
   const btn    = document.getElementById('publish-btn');
 
   if (!GITHUB_TOKEN || !GITHUB_TOKEN.startsWith('ghp_')) {
     status.className = 'save-status error';
-    status.textContent = 'â  No token. Please log out and log back in with your GitHub token.';
+    status.textContent = '⚠ No token. Please log out and log back in with your GitHub token.';
     return;
   }
 
@@ -799,14 +964,14 @@ async function publishToGitHub() {
       ENTRIES.length = adminEntries.length;
       render();
       status.className = 'save-status success';
-      status.textContent = '[ PUBLISHED â site will update in ~30 seconds ]';
+      status.textContent = '[ PUBLISHED — site will update in ~30 seconds ]';
     } else {
       const err = await updateRes.json();
       throw new Error(err.message || 'GitHub update failed.');
     }
   } catch(e) {
     status.className = 'save-status error';
-    status.textContent = `â  ${e.message}`;
+    status.textContent = `⚠ ${e.message}`;
   } finally {
     btn.disabled = false;
   }
