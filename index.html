@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>SCP Foundation — Containment Database</title>
+<title>SCP Foundation â Containment Database</title>
 <link href="https://fonts.googleapis.com/css2?family=Share+Tech+Mono&family=Barlow:wght@300;400;500;600&family=Barlow+Condensed:wght@600;700&display=swap" rel="stylesheet">
 <style>
   :root {
@@ -152,7 +152,7 @@
   .scp-desc { font-size: 0.82rem; color: var(--text-dim); margin-top: 3px; line-height: 1.5; }
   .empty-note { font-family: 'Share Tech Mono', monospace; font-size: 0.75rem; color: var(--text-dim); padding: 10px 0 4px; letter-spacing: 0.05em; }
 
-  /* ── Modals ── */
+  /* ââ Modals ââ */
   .modal-overlay {
     display: none; position: fixed; inset: 0;
     background: rgba(0,0,0,0.75); z-index: 500;
@@ -210,7 +210,7 @@
 
   .error-msg { font-family: 'Share Tech Mono', monospace; font-size: 0.72rem; color: var(--keter); margin-top: 1rem; display: none; }
 
-  /* ── Admin Panel ── */
+  /* ââ Admin Panel ââ */
   .admin-panel {
     display: none; position: fixed; inset: 0;
     background: var(--bg); z-index: 600; overflow-y: auto;
@@ -333,7 +333,7 @@
     </svg>
     <div class="header-text">
       <h1>SCP Foundation</h1>
-      <div class="subtitle">Secure · Contain · Protect — Containment Database</div>
+      <div class="subtitle">Secure Â· Contain Â· Protect â Containment Database</div>
     </div>
   </div>
   <div class="controls">
@@ -513,7 +513,7 @@
           2. Developer settings &#8594; Personal access tokens &#8594; Tokens (classic)<br>
           3. Generate new token with <span>repo</span> scope<br>
           4. Copy the <span>ghp_...</span> token<br>
-          5. Log into this panel — paste the token when prompted<br><br>
+          5. Log into this panel â paste the token when prompted<br><br>
           The token is only held in memory for your session. It is never written to the file or committed to GitHub.
         </p>
       </div>
@@ -522,25 +522,32 @@
 </div>
 
 <script>
-// ─── CONFIG ────────────────────────────────────────────────────────────────
+// âââ CONFIG ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 const FORMSPREE_URL  = "https://formspree.io/f/mnjlyjqp";
-let GITHUB_TOKEN = ""; // set at login time — never stored in file
+let GITHUB_TOKEN = ""; // set at login time â never stored in file
 const GITHUB_OWNER   = "phoenixdoubleo";
 const GITHUB_REPO    = "scpsr-catalog";
 const GITHUB_FILE    = "index.html";
 const ADMIN_PASSWORD = "MajorRedIsCool";
-// ───────────────────────────────────────────────────────────────────────────
+// âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 
-// ─── ADD APPROVED ENTRIES HERE ─────────────────────────────────────────────
+// âââ ADD APPROVED ENTRIES HERE âââââââââââââââââââââââââââââââââââââââââââââ
 const ENTRIES = [
-  // { num: 173, suffix: "", name: "The Sculpture", cls: "Euclid", desc: "Animate concrete statue.", doc: "https://..." },
+  {
+    "num": 3,
+    "suffix": "",
+    "name": "f",
+    "cls": "Safe",
+    "desc": "f",
+    "doc": "f"
+  }
 ];
-// ───────────────────────────────────────────────────────────────────────────
+// âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 
 const CLASSES = ["Safe","Euclid","Keter","Thaumiel","Pending"];
 let adminEntries = JSON.parse(JSON.stringify(ENTRIES));
 
-// ── Public submit form ──────────────────────────────────────────────────────
+// ââ Public submit form ââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 function blockLetters(e) {
   const allowed = ['Backspace','Delete','ArrowLeft','ArrowRight','Tab','Home','End'];
   if (allowed.includes(e.key)) return;
@@ -581,7 +588,7 @@ async function saveEntry() {
   const errEl   = document.getElementById('err');
 
   if (!num || num < 1 || !name || !desc || !discord || !doc) {
-    errEl.textContent = '⚠ All fields are required.';
+    errEl.textContent = 'â  All fields are required.';
     errEl.style.display = 'block'; return;
   }
 
@@ -603,17 +610,17 @@ async function saveEntry() {
       document.getElementById('success-modal').classList.add('open');
     } else {
       btn.disabled = false; btn.textContent = 'Submit';
-      errEl.textContent = '⚠ Submission failed. Please try again.';
+      errEl.textContent = 'â  Submission failed. Please try again.';
       errEl.style.display = 'block';
     }
   } catch {
     btn.disabled = false; btn.textContent = 'Submit';
-    errEl.textContent = '⚠ Network error. Please try again.';
+    errEl.textContent = 'â  Network error. Please try again.';
     errEl.style.display = 'block';
   }
 }
 
-// ── Main catalog render ─────────────────────────────────────────────────────
+// ââ Main catalog render âââââââââââââââââââââââââââââââââââââââââââââââââââââ
 function render() {
   const q = document.getElementById('search').value.toLowerCase();
   const filtered = ENTRIES.filter(e =>
@@ -652,7 +659,7 @@ function render() {
   });
 }
 
-// ── Admin login ─────────────────────────────────────────────────────────────
+// ââ Admin login âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 function openAdminLogin() {
   document.getElementById('admin-login').classList.add('open');
   document.getElementById('admin-err').style.display = 'none';
@@ -681,7 +688,7 @@ function checkAdminPw() {
   }
 }
 
-// ── Admin panel ─────────────────────────────────────────────────────────────
+// ââ Admin panel âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 function openAdmin() {
   adminEntries = JSON.parse(JSON.stringify(ENTRIES));
   document.getElementById('admin-panel').classList.add('open');
@@ -734,14 +741,14 @@ function adminAddEntry() {
   renderAdminList();
 }
 
-// ── Publish to GitHub ───────────────────────────────────────────────────────
+// ââ Publish to GitHub âââââââââââââââââââââââââââââââââââââââââââââââââââââââ
 async function publishToGitHub() {
   const status = document.getElementById('save-status');
   const btn    = document.getElementById('publish-btn');
 
   if (!GITHUB_TOKEN || !GITHUB_TOKEN.startsWith('ghp_')) {
     status.className = 'save-status error';
-    status.textContent = '⚠ No token. Please log out and log back in with your GitHub token.';
+    status.textContent = 'â  No token. Please log out and log back in with your GitHub token.';
     return;
   }
 
@@ -792,14 +799,14 @@ async function publishToGitHub() {
       ENTRIES.length = adminEntries.length;
       render();
       status.className = 'save-status success';
-      status.textContent = '[ PUBLISHED — site will update in ~30 seconds ]';
+      status.textContent = '[ PUBLISHED â site will update in ~30 seconds ]';
     } else {
       const err = await updateRes.json();
       throw new Error(err.message || 'GitHub update failed.');
     }
   } catch(e) {
     status.className = 'save-status error';
-    status.textContent = `⚠ ${e.message}`;
+    status.textContent = `â  ${e.message}`;
   } finally {
     btn.disabled = false;
   }
