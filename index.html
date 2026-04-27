@@ -606,6 +606,7 @@
 <script>
 // ─── CONFIG ────────────────────────────────────────────────────────────────
 const FORMSPREE_URL  = "https://formspree.io/f/mnjlyjqp";
+const MAKE_URL       = "https://hook.us2.make.com/g72tk3do2dy660dj4bt56wuj7e7y06c4";
 let GITHUB_TOKEN = ""; // set at login time — never stored in file
 const GITHUB_OWNER   = "phoenixdoubleo";
 const GITHUB_REPO    = "scpsr-catalog";
@@ -673,16 +674,26 @@ async function saveEntry() {
   btn.disabled = true; btn.textContent = 'Sending...';
 
   try {
-    const res = await fetch(FORMSPREE_URL, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-      body: JSON.stringify({
+    const payload = JSON.stringify({
         scp_number: `SCP-${String(num).padStart(3,'0')}${suffix}`,
         name, object_class: cls, description: desc,
         discord_username: discord, document_link: doc
-      })
-    });
-    if (res.ok) {
+      });
+
+    const [formRes] = await Promise.all([
+      fetch(FORMSPREE_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: payload
+      }),
+      fetch(MAKE_URL, {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: payload
+      }).catch(() => {}) // silent fail if Make is down
+    ]);
+
+    if (formRes.ok) {
       closeModal();
       document.getElementById('success-modal').classList.add('open');
     } else {
