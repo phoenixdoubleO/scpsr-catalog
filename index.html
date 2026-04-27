@@ -153,7 +153,7 @@
   .scp-desc { font-size: 0.82rem; color: var(--text-dim); margin-top: 3px; line-height: 1.5; }
   .empty-note { font-family: 'Share Tech Mono', monospace; font-size: 0.75rem; color: var(--text-dim); padding: 10px 0 4px; letter-spacing: 0.05em; }
 
-  /* ââ Modals ââ */
+  /* ── Modals ── */
   .modal-overlay {
     display: none; position: fixed; inset: 0;
     background: rgba(0,0,0,0.75); z-index: 500;
@@ -211,7 +211,7 @@
 
   .error-msg { font-family: 'Share Tech Mono', monospace; font-size: 0.72rem; color: var(--keter); margin-top: 1rem; display: none; }
 
-  /* ââ Admin Panel ââ */
+  /* ── Admin Panel ── */
   .admin-panel {
     display: none; position: fixed; inset: 0;
     background: var(--bg); z-index: 600; overflow-y: auto;
@@ -352,7 +352,8 @@
     </svg>
     <div class="header-text">
       <h1>SCP Foundation</h1>
-      <div class="subtitle">Secure Â· Contain Â· Protect â Containment Database</div>
+      <div class="subtitle">Secure · Contain · Protect — Containment Database</div>
+      <div class="subtitle" style="margin-top:4px;">Total Entries: <span id="header-count" style="color:var(--accent);">0</span></div>
     </div>
   </div>
   <div class="controls">
@@ -364,11 +365,13 @@
       <input type="text" id="search" placeholder="Search entries..." oninput="render()">
     </div>
     <button class="add-btn" onclick="openModal()">+ Log Entry</button>
+    <button class="admin-btn" onclick="openStatusModal()">Check Status</button>
     <button class="admin-btn" onclick="openAdminLogin()">Admin</button>
   </div>
 </header>
 
 <main>
+  
   <div id="sections"></div>
 </main>
 
@@ -431,6 +434,23 @@
     <div class="modal-title" style="margin-bottom:0.5rem;">Submission Received</div>
     <p style="font-size:0.85rem;color:var(--text-dim);line-height:1.6;margin-bottom:1.5rem;">Your entry has been sent for review. If approved, it will be added to the catalog.</p>
     <button class="btn-save" onclick="document.getElementById('success-modal').classList.remove('open')" style="width:100%;">Close</button>
+  </div>
+</div>
+
+<!-- Status Check Modal -->
+<div class="modal-overlay" id="status-modal" onclick="statusOverlayClick(event)">
+  <div class="modal" style="width:380px;">
+    <div class="modal-title">Check Submission Status</div>
+    <p class="instructions" style="margin-bottom:1rem;line-height:1.8;">Enter your Discord username to check if your SCP submission has been approved.</p>
+    <div class="field">
+      <label>Your Discord Username</label>
+      <input type="text" id="status-discord" placeholder="e.g. username#0000" onkeydown="if(event.key==='Enter')checkStatus()">
+    </div>
+    <div id="status-result-modal" style="display:none;margin-top:1rem;padding:10px 14px;border-radius:4px;font-family:'Share Tech Mono',monospace;font-size:0.78rem;line-height:1.8;letter-spacing:0.04em;"></div>
+    <div class="modal-actions">
+      <button class="btn-cancel" onclick="closeStatusModal()">Close</button>
+      <button class="btn-save" onclick="checkStatus()">Check</button>
+    </div>
   </div>
 </div>
 
@@ -510,6 +530,10 @@
           <div class="field">
             <label>Document Link</label>
             <input type="url" id="a-doc" placeholder="https://docs.google.com/...">
+          </div>
+          <div class="field">
+            <label>Submitter Discord Username</label>
+            <input type="text" id="a-discord" placeholder="e.g. username#0000">
           </div>
           <div class="error-msg" id="a-err">&#9888; Number and name are required.</div>
           <button class="btn-add-entry" onclick="adminAddEntry()">+ Add to Catalog</button>
@@ -595,6 +619,10 @@
       <label>Document Link</label>
       <input type="url" id="e-doc" placeholder="https://docs.google.com/...">
     </div>
+    <div class="field">
+      <label>Submitted by (Discord)</label>
+      <input type="text" id="e-discord" placeholder="username#0000">
+    </div>
     <div class="error-msg" id="e-err">&#9888; Number and name are required.</div>
     <div class="modal-actions">
       <button class="btn-cancel" onclick="closeEditModal()">Cancel</button>
@@ -604,59 +632,28 @@
 </div>
 
 <script>
-// âââ CONFIG ââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+// ─── CONFIG ────────────────────────────────────────────────────────────────
 const FORMSPREE_URL  = "https://formspree.io/f/mnjlyjqp";
 const BOT_URL        = "https://scp-bot-production-9654.up.railway.app/notify";
-let GITHUB_TOKEN = ""; // set at login time â never stored in file
+let GITHUB_TOKEN = ""; // set at login time — never stored in file
 const GITHUB_OWNER   = "phoenixdoubleo";
 const GITHUB_REPO    = "scpsr-catalog";
 const GITHUB_FILE    = "index.html";
 const ADMIN_PASSWORD  = "MajorRedIsCool";
 const VIEWER_PASSWORD = "test";
 let canPublish = false;
-// âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+// ───────────────────────────────────────────────────────────────────────────
 
-// âââ ADD APPROVED ENTRIES HERE âââââââââââââââââââââââââââââââââââââââââââââ
+// ─── ADD APPROVED ENTRIES HERE ─────────────────────────────────────────────
 const ENTRIES = [
-  {
-    "num": 7215,
-    "suffix": "-N",
-    "name": "The Frogman / [red0_0]",
-    "cls": "Pending",
-    "desc": "SCP-7215-N is a tall, lanky humanoid creature completely made of fishing net web fabrics/meshes. It has no visible orifices anywhere on its body, with barbed hooks, needles, and thin fishing line regularly protruding from various parts of its body except for on the hands and feet. These protrusions grow at a moderate rate after consuming any material other than animal flesh. SCP-7215-N is capable of agile and quick movements, however is mostly idle and motionless when not relocating itself or in pursuit of prey. It’s a carnivorous, nocturnal, and intelligent entity that feeds on prey using an opportunistic ambush approach or by pacifying prey with compound-7215. \n\nSCP-7215-N is able to secret an odorless, tasteless, and nearly colorless chemical through its ‘skin’ that instantly evaporates into the air when released, now deemed compound-7215. When any animal besides humans come into contact with compound-7215, they seem to undergo a state of pacification where they become extremely docile no matter the surrounding situation. When a human comes into contact with compound-7215, they’ll instead experience a heightened sense of fear, anxiety, and uneasiness, though won’t be able to pin where the source is coming from, or why they’re experiencing this phenomena. These experiences last until the subject has been removed from the area contaminated with compound-7215, but become stronger the longer one resides in a contaminated area.\n\n\nWhen any foreign item is ingested or thoroughly embedded into SCP-7215-N, it is capable of utilizing certain aspects and properties of that material for a limited period of time, essentially copying the properties of what was ingested/embedded. It seemingly can also choose when it wants to use this ability and what properties it wants to copy. With enough concentration however, it can instead 'absorb' items through the netting, where they visually sink into its body. However, this process is quite slow and requires significant focus in order to assimilate things into its body. Additionally, anything ingested, embedded, or absorbed can be stored inside SCP-7215 for a varying amount of time before they begin to digest within its body.\n\nWhen air humidity and the surrounding environment’s water levels drop, SCP-7215-N will become increasingly more aggressive and agitated, along with exhibiting erratic behavior. This will continue until the surrounding humidity reaches normal levels for it once again, or if it can delve itself into a large body of water.",
-    "doc": "https://docs.google.com/document/d/1KfCXtu-WmoqNzBEKv5Os7wWcIt1BdUhmOwdE_10MEBI/edit?usp=sharing"
-  },
-  {
-    "num": 9183,
-    "suffix": "-N",
-    "name": "N/A / [AttackTheUsers]",
-    "cls": "Pending",
-    "desc": "SCP-9183-N is a Caucasian male named Lucius Varran, approximately 24 years of age, standing 5 foot 11, and weighing 172 pounds. The subject has short brown hair, black colored eyes, and ritualistic markings across his chest, arms, and back.",
-    "doc": "https://docs.google.com/document/d/1gn5svrj2xTl8VpmLCSSyB5rryZ7iZ80YmAxr6gloetk/edit?tab=t.0"
-  },
-  {
-    "num": 343,
-    "suffix": "",
-    "name": "God / [N/A]",
-    "cls": "Safe",
-    "desc": "SCP-343 is a male, seemingly race-less, humanoid in appearance with apparent omnipotence. SCP-343 was discovered walking the streets of Prague and detained after a staff member witnessed him disappear from the streets and reappear on a rooftop. SCP-343 is detained willingly in his chamber, as containment has proved impossible (see notes).",
-    "doc": "https://docs.google.com/document/d/1jLbOvCWOZFENG5bYU2MFfRJi-iTGLcLbxvlYpA_j2L8/edit?tab=t.0"
-  },
-  {
-    "num": 181,
-    "suffix": "",
-    "name": "Lucky / [Didyou]",
-    "cls": "Safe",
-    "desc": "G████ O██████, formerly LvD-87465, had been incarcerated for repeated offenses of defrauding the Nevada Gaming Commission. Following the 18th month of his life sentence, he was quietly moved to Armed Reliquary Containment Area-02, where he was initiated and assigned a Level D clearance. His first exposure experiment was with SCP-███, and the results were bloody but expected. When LvD-65468 was exposed to SCP-███, he rampaged and killed those in the room, but SCP-181 was spared when an armed response team put down LvD-65468.",
-    "doc": "https://docs.google.com/document/d/1Qwk_qmrSvxEEW3pl5uQBrGkM0qpyTZefIsrgv7b0c7o/edit?tab=t.0"
-  }
+  // { num: 173, suffix: "", name: "The Sculpture", cls: "Euclid", desc: "Animate concrete statue.", doc: "https://...", discord: "username#0000" },
 ];
-// âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+// ───────────────────────────────────────────────────────────────────────────
 
 const CLASSES = ["Safe","Euclid","Keter","Thaumiel","Pending"];
 let adminEntries = JSON.parse(JSON.stringify(ENTRIES));
 
-// ââ Public submit form ââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+// ── Public submit form ──────────────────────────────────────────────────────
 function blockLetters(e) {
   const allowed = ['Backspace','Delete','ArrowLeft','ArrowRight','Tab','Home','End'];
   if (allowed.includes(e.key)) return;
@@ -697,7 +694,7 @@ async function saveEntry() {
   const errEl   = document.getElementById('err');
 
   if (!num || num < 1 || !name || !desc || !discord || !doc) {
-    errEl.textContent = 'â  All fields are required.';
+    errEl.textContent = '⚠ All fields are required.';
     errEl.style.display = 'block'; return;
   }
 
@@ -729,18 +726,19 @@ async function saveEntry() {
       document.getElementById('success-modal').classList.add('open');
     } else {
       btn.disabled = false; btn.textContent = 'Submit';
-      errEl.textContent = 'â  Submission failed. Please try again.';
+      errEl.textContent = '⚠ Submission failed. Please try again.';
       errEl.style.display = 'block';
     }
   } catch {
     btn.disabled = false; btn.textContent = 'Submit';
-    errEl.textContent = 'â  Network error. Please try again.';
+    errEl.textContent = '⚠ Network error. Please try again.';
     errEl.style.display = 'block';
   }
 }
 
-// ââ Main catalog render âââââââââââââââââââââââââââââââââââââââââââââââââââââ
+// ── Main catalog render ─────────────────────────────────────────────────────
 function render() {
+  document.getElementById('header-count').textContent = ENTRIES.length;
   const q = document.getElementById('search').value.toLowerCase();
   const filtered = ENTRIES.filter(e =>
     String(e.num).includes(q) ||
@@ -778,7 +776,7 @@ function render() {
   });
 }
 
-// ââ Admin login âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+// ── Admin login ─────────────────────────────────────────────────────────────
 function openAdminLogin() {
   document.getElementById('admin-login').classList.add('open');
   document.getElementById('admin-err').style.display = 'none';
@@ -805,6 +803,7 @@ function checkAdminPw() {
     document.getElementById('admin-login').classList.remove('open');
     openAdmin();
   } else {
+    playDeniedSound();
     document.getElementById('admin-err').style.display = 'block';
     document.getElementById('admin-pw').value = '';
     document.getElementById('admin-token').value = '';
@@ -812,10 +811,12 @@ function checkAdminPw() {
   }
 }
 
-// ââ Admin panel âââââââââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+// ── Admin panel ─────────────────────────────────────────────────────────────
 function openAdmin() {
   adminEntries = JSON.parse(JSON.stringify(ENTRIES));
+  playAccessSound();
   document.getElementById('admin-panel').classList.add('open');
+  playAccessSound();
   switchTab('add');
   renderAdminList();
   renderLiveList();
@@ -914,6 +915,7 @@ function openEditModal(idx, fromLive) {
   document.getElementById('e-class').value = e.cls;
   document.getElementById('e-desc').value = e.desc || '';
   document.getElementById('e-doc').value = e.doc || '';
+  document.getElementById('e-discord').value = e.discord || '';
   document.getElementById('e-err').style.display = 'none';
   document.getElementById('edit-modal').classList.add('open');
 }
@@ -962,27 +964,27 @@ function adminAddEntry() {
   if (!num || num < 1 || !name) { errEl.style.display = 'block'; return; }
   errEl.style.display = 'none';
 
-  adminEntries.push({ num, suffix, name, cls, desc, doc });
+  adminEntries.push({ num, suffix, name, cls, desc, doc, discord: (document.getElementById('a-discord') ? document.getElementById('a-discord').value.trim() : '') });
   ['a-num','a-name','a-desc','a-doc'].forEach(id => document.getElementById(id).value = '');
   document.getElementById('a-class').value = 'Safe';
   document.getElementById('a-suffix').value = '';
   renderAdminList();
 }
 
-// ââ Publish to GitHub âââââââââââââââââââââââââââââââââââââââââââââââââââââââ
+// ── Publish to GitHub ───────────────────────────────────────────────────────
 async function publishToGitHub() {
   const status = document.getElementById('save-status');
   const btn    = document.getElementById('publish-btn');
 
   if (!canPublish) {
     status.className = 'save-status error';
-    status.textContent = 'â  Your account does not have publish access.';
+    status.textContent = '⚠ Your account does not have publish access.';
     return;
   }
 
   if (!GITHUB_TOKEN || !GITHUB_TOKEN.startsWith('ghp_')) {
     status.className = 'save-status error';
-    status.textContent = 'â  No token. Please log out and log back in with your GitHub token.';
+    status.textContent = '⚠ No token. Please log out and log back in with your GitHub token.';
     return;
   }
 
@@ -1033,14 +1035,14 @@ async function publishToGitHub() {
       ENTRIES.length = adminEntries.length;
       render();
       status.className = 'save-status success';
-      status.textContent = '[ PUBLISHED â site will update in ~30 seconds ]';
+      status.textContent = '[ PUBLISHED — site will update in ~30 seconds ]';
     } else {
       const err = await updateRes.json();
       throw new Error(err.message || 'GitHub update failed.');
     }
   } catch(e) {
     status.className = 'save-status error';
-    status.textContent = `â  ${e.message}`;
+    status.textContent = `⚠ ${e.message}`;
   } finally {
     btn.disabled = false;
   }
@@ -1048,6 +1050,95 @@ async function publishToGitHub() {
 
 document.getElementById('inp-num').addEventListener('keydown', e => { if(e.key==='Enter') saveEntry(); });
 document.getElementById('inp-name').addEventListener('keydown', e => { if(e.key==='Enter') saveEntry(); });
+document.getElementById('status-discord').addEventListener('keydown', e => { if(e.key==='Enter') checkStatus(); });
+
+function openStatusModal() {
+  document.getElementById('status-modal').classList.add('open');
+  document.getElementById('status-result-modal').style.display = 'none';
+  document.getElementById('status-discord').value = '';
+  setTimeout(() => document.getElementById('status-discord').focus(), 50);
+}
+
+function closeStatusModal() {
+  document.getElementById('status-modal').classList.remove('open');
+}
+
+function statusOverlayClick(e) {
+  if (e.target === document.getElementById('status-modal')) closeStatusModal();
+}
+
+function checkStatus() {
+  const username = document.getElementById('status-discord').value.trim().toLowerCase();
+  const result = document.getElementById('status-result-modal');
+  if (!username) { result.style.display = 'none'; return; }
+
+  const approved = ENTRIES.filter(e =>
+    e.discord && e.discord.toLowerCase() === username
+  );
+
+  result.style.display = 'inline';
+  if (approved.length > 0) {
+    result.style.color = 'var(--safe)';
+    result.textContent = `✓ ${approved.length} entr${approved.length === 1 ? 'y' : 'ies'} approved: ${approved.map(e => 'SCP-' + String(e.num).padStart(3,'0') + (e.suffix||'')).join(', ')}`;
+  } else {
+    result.style.color = 'var(--text-dim)';
+    result.textContent = '[ No approved entries found for that username ]';
+  }
+}
+
+// Keycard sounds
+let lastSoundTime = 0;
+const SOUND_COOLDOWN = 1500; // ms
+
+function playAccessSound() {
+  const now = Date.now();
+  if (now - lastSoundTime < SOUND_COOLDOWN) return;
+  lastSoundTime = now;
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    // Approved: two rising beeps (keycard accepted)
+    [
+      { freq: 880,  start: 0,    dur: 0.08 },
+      { freq: 1320, start: 0.12, dur: 0.18 },
+    ].forEach(({ freq, start, dur }) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain); gain.connect(ctx.destination);
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(freq, ctx.currentTime + start);
+      gain.gain.setValueAtTime(0, ctx.currentTime + start);
+      gain.gain.linearRampToValueAtTime(0.3, ctx.currentTime + start + 0.01);
+      gain.gain.linearRampToValueAtTime(0, ctx.currentTime + start + dur);
+      osc.start(ctx.currentTime + start);
+      osc.stop(ctx.currentTime + start + dur + 0.05);
+    });
+  } catch(e) {}
+}
+
+function playDeniedSound() {
+  const now = Date.now();
+  if (now - lastSoundTime < SOUND_COOLDOWN) return;
+  lastSoundTime = now;
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    // Denied: two falling buzzes
+    [
+      { freq: 300, start: 0,    dur: 0.18 },
+      { freq: 200, start: 0.22, dur: 0.25 },
+    ].forEach(({ freq, start, dur }) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain); gain.connect(ctx.destination);
+      osc.type = 'square';
+      osc.frequency.setValueAtTime(freq, ctx.currentTime + start);
+      gain.gain.setValueAtTime(0, ctx.currentTime + start);
+      gain.gain.linearRampToValueAtTime(0.2, ctx.currentTime + start + 0.01);
+      gain.gain.linearRampToValueAtTime(0, ctx.currentTime + start + dur);
+      osc.start(ctx.currentTime + start);
+      osc.stop(ctx.currentTime + start + dur + 0.05);
+    });
+  } catch(e) {}
+}
 
 render();
 </script>
