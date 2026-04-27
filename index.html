@@ -417,13 +417,20 @@
 
 <!-- Admin Login Modal -->
 <div class="modal-overlay" id="admin-login" onclick="adminLoginOverlay(event)">
-  <div class="modal" style="width:340px;">
+  <div class="modal" style="width:380px;">
     <div class="modal-title">Admin Access</div>
     <div class="field">
       <label>Password</label>
       <input type="password" id="admin-pw" placeholder="Enter password" onkeydown="if(event.key==='Enter')checkAdminPw()">
     </div>
-    <div class="error-msg" id="admin-err" style="display:none;">&#9888; Incorrect password.</div>
+    <div class="field" style="margin-top:4px;">
+      <label>GitHub Token <span style="color:var(--text-dim);font-weight:300;">(stays in memory only)</span></label>
+      <input type="password" id="admin-token" placeholder="ghp_..." onkeydown="if(event.key==='Enter')checkAdminPw()">
+    </div>
+    <div class="error-msg" id="admin-err" style="display:none;">&#9888; Incorrect password or missing token.</div>
+    <div style="font-family:'Share Tech Mono',monospace;font-size:0.68rem;color:var(--text-dim);margin-top:10px;line-height:1.7;">
+      Token is never saved to the file or committed to GitHub.<br>Generate one at GitHub &#8594; Settings &#8594; Developer settings &#8594; Tokens (classic) with <span style="color:var(--accent);">repo</span> scope.
+    </div>
     <div class="modal-actions">
       <button class="btn-cancel" onclick="document.getElementById('admin-login').classList.remove('open')">Cancel</button>
       <button class="btn-save" onclick="checkAdminPw()">Enter</button>
@@ -502,11 +509,12 @@
       <div class="admin-card">
         <h3>Setup</h3>
         <p class="instructions">
-          1. Open this file in GitHub<br>
-          2. Find the line: <span>const GITHUB_TOKEN</span><br>
-          3. Replace <span>YOUR_TOKEN_HERE</span> with your personal access token<br>
-          4. Save &amp; commit — publishing will then work automatically.<br><br>
-          Token needs <span>repo</span> scope. Keep it private!
+          1. Go to GitHub &#8594; Profile &#8594; Settings<br>
+          2. Developer settings &#8594; Personal access tokens &#8594; Tokens (classic)<br>
+          3. Generate new token with <span>repo</span> scope<br>
+          4. Copy the <span>ghp_...</span> token<br>
+          5. Log into this panel — paste the token when prompted<br><br>
+          The token is only held in memory for your session. It is never written to the file or committed to GitHub.
         </p>
       </div>
     </div>
@@ -516,7 +524,7 @@
 <script>
 // ─── CONFIG ────────────────────────────────────────────────────────────────
 const FORMSPREE_URL  = "https://formspree.io/f/mnjlyjqp";
-const GITHUB_TOKEN   = "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";   // paste your ghp_... token here
+let GITHUB_TOKEN = ""; // set at login time — never stored in file
 const GITHUB_OWNER   = "phoenixdoubleo";
 const GITHUB_REPO    = "scpsr-catalog";
 const GITHUB_FILE    = "index.html";
@@ -649,6 +657,7 @@ function openAdminLogin() {
   document.getElementById('admin-login').classList.add('open');
   document.getElementById('admin-err').style.display = 'none';
   document.getElementById('admin-pw').value = '';
+  document.getElementById('admin-token').value = '';
   setTimeout(() => document.getElementById('admin-pw').focus(), 50);
 }
 
@@ -658,13 +667,16 @@ function adminLoginOverlay(e) {
 }
 
 function checkAdminPw() {
-  const pw = document.getElementById('admin-pw').value;
-  if (pw === ADMIN_PASSWORD) {
+  const pw    = document.getElementById('admin-pw').value;
+  const token = document.getElementById('admin-token').value.trim();
+  if (pw === ADMIN_PASSWORD && token.startsWith('ghp_')) {
+    GITHUB_TOKEN = token;
     document.getElementById('admin-login').classList.remove('open');
     openAdmin();
   } else {
     document.getElementById('admin-err').style.display = 'block';
     document.getElementById('admin-pw').value = '';
+    document.getElementById('admin-token').value = '';
     document.getElementById('admin-pw').focus();
   }
 }
@@ -727,9 +739,9 @@ async function publishToGitHub() {
   const status = document.getElementById('save-status');
   const btn    = document.getElementById('publish-btn');
 
-  if (GITHUB_TOKEN === 'YOUR_TOKEN_HERE') {
+  if (!GITHUB_TOKEN || !GITHUB_TOKEN.startsWith('ghp_')) {
     status.className = 'save-status error';
-    status.textContent = '⚠ No token set. Paste your GitHub token into the GITHUB_TOKEN variable.';
+    status.textContent = '⚠ No token. Please log out and log back in with your GitHub token.';
     return;
   }
 
