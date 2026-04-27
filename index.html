@@ -606,7 +606,7 @@
 <script>
 // ─── CONFIG ────────────────────────────────────────────────────────────────
 const FORMSPREE_URL  = "https://formspree.io/f/mnjlyjqp";
-const MAKE_URL       = "https://hook.us2.make.com/g72tk3do2dy660dj4bt56wuj7e7y06c4";
+const BOT_URL        = "https://scp-bot-production-9654.up.railway.app/notify";
 let GITHUB_TOKEN = ""; // set at login time — never stored in file
 const GITHUB_OWNER   = "phoenixdoubleo";
 const GITHUB_REPO    = "scpsr-catalog";
@@ -686,11 +686,11 @@ async function saveEntry() {
         headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
         body: payload
       }),
-      fetch(MAKE_URL, {
+      fetch(BOT_URL, {
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: payload
-      }).catch(() => {}) // silent fail if Make is down
+      }).catch(() => {}) // silent fail if bot is down
     ]);
 
     if (formRes.ok) {
